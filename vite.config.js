@@ -11,5 +11,10 @@ export default defineConfig({
                 ArcoResolver()
             ]
         })
-    ]
+    ],
+    server: {
+        open: true,
+        port: 8080,
+        inline: true,
+    }
 })

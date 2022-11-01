@@ -10,10 +10,10 @@
             <input type="password" placeholder="请输入密码" class="input-item" />
         </div>
         <div class="items">
-            <button class="login-btn">登录</button>
+            <button class="login-btn">注册</button>
         </div>
         <div class="items-text" style="margin-bottom: 6px;">
-            <router-link :to="{path: '/register'}">点击此处注册账号</router-link>
+            <router-link :to="{path: '/login'}">点击此处返回登录</router-link>
         </div>
     </div>
 </template>
@@ -68,23 +68,13 @@ body {
 
     font-size: 1.4rem;
     color: whitesmoke;
+    padding-left: 9px;
 }
 .input-icon {
     width: 8%;
     padding-left: 6px;
     padding-bottom: 6px;
     border-bottom:1px solid whitesmoke;
-}
-.login-btn {
-    border-radius: 5px;
-    font-size: 1.3rem;
-    border: 0;
-    outline: 0;
-    padding: 12px 156px;
-    color: whitesmoke;
-    background-color: #018ccf;
-    letter-spacing: 0.6rem;
-    cursor: pointer;
 }
 .items-text {
     display: flex;
@@ -98,5 +88,15 @@ body {
     letter-spacing: 0.05rem;
     color: whitesmoke;
     cursor: pointer;
+}
+.login-btn {
+    border-radius: 5px;
+    font-size: 1.3rem;
+    border: 0;
+    outline: 0;
+    padding: 12px 156px;
+    color: whitesmoke;
+    background-color: #018ccf;
+    letter-spacing: 0.6rem;
 }
 </style>
