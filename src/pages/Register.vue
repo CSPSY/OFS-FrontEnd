@@ -9,8 +9,21 @@
             <icon-lock class="input-icon" />
             <input type="password" placeholder="请输入密码" class="input-item" />
         </div>
+        <div class="items" style="margin-bottom: 35px">
+            <input style="width: 100%; padding-bottom: 8px;" type="password" placeholder="请确认密码" class="input-item" />
+        </div>
+        <div class="items-lr">
+            <div class="left">
+                <icon-email class="input-icon" />
+                <input type="text" placeholder="请输入邮箱" class="input-item" required>
+            </div>
+            <div class="right">
+                <input type="text" placeholder="邮箱验证码" class="input-item" required>
+                <button class="captcha-btn" @click="">获取</button>
+            </div>  
+        </div>
         <div class="items">
-            <button class="login-btn">注册</button>
+            <button class="register-btn">注册</button>
         </div>
         <div class="items-text" style="margin-bottom: 6px;">
             <router-link :to="{path: '/login'}">点击此处返回登录</router-link>
@@ -19,9 +32,9 @@
 </template>
 
 <script>
-import { IconUser, IconLock } from '@arco-design/web-vue/es/icon';
+import { IconUser, IconLock, IconEmail, IconCheckCircleFill } from '@arco-design/web-vue/es/icon';
 export default {
-    components: { IconUser, IconLock },
+    components: { IconUser, IconLock, IconEmail, IconCheckCircleFill },
     name: 'Login'
 };
 </script>
@@ -32,7 +45,9 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: #43515c;
+    background-image: url('../../public/login-register-bg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 .card {
     position: absolute;
@@ -46,7 +61,7 @@ body {
     display: flex;
     flex-direction: column;
     padding: 24px 32px 36px;
-    background: transparent;
+    background-color: rgba(124, 124, 124, 0.65);
 }
 .card-title {
     text-align: center;
@@ -66,12 +81,13 @@ body {
     outline: 0;
     border-bottom:1px solid whitesmoke;
 
-    font-size: 1.4rem;
+    font-size: 1rem;
     color: whitesmoke;
     padding-left: 9px;
+    letter-spacing: 0.08em;
 }
 .input-icon {
-    width: 8%;
+    width: 7%;
     padding-left: 6px;
     padding-bottom: 6px;
     border-bottom:1px solid whitesmoke;
@@ -89,14 +105,50 @@ body {
     color: whitesmoke;
     cursor: pointer;
 }
-.login-btn {
+.register-btn {
     border-radius: 5px;
     font-size: 1.3rem;
     border: 0;
     outline: 0;
     padding: 12px 156px;
     color: whitesmoke;
-    background-color: #018ccf;
+    background-color: rgb(1, 140, 207, .88);
     letter-spacing: 0.6rem;
+    cursor: pointer;
+}
+
+.items-lr {
+    display: flex;
+    width: 512px;
+    margin-bottom: 32px;
+}
+
+.left, .right {
+    display: flex;
+}
+.left {
+    width: 58%;
+}
+.left input, .right input {
+    padding-bottom: 4px;
+    font-size: 1rem;
+}
+.left .input-icon {
+    width: 14%;
+}
+.right {
+    right: 30%;
+    margin-left: 30px;
+}
+.captcha-btn {
+    width: 50%;
+    border-radius: 5px;
+    margin-left: 12px;
+    border: 0;
+    outline: 0;
+    color: whitesmoke;
+    background-color: rgb(1, 140, 207, .88);
+    letter-spacing: 0.22em;
+    cursor: pointer;
 }
 </style>

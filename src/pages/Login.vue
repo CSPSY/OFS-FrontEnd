@@ -32,7 +32,9 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: #43515c;
+    background-image: url('../../public/login-register-bg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 .card {
     position: absolute;
@@ -46,7 +48,7 @@ body {
     display: flex;
     flex-direction: column;
     padding: 24px 32px 36px;
-    background: transparent;
+    background-color: rgba(124, 124, 124, 0.65);
 }
 .card-title {
     text-align: center;
@@ -66,11 +68,13 @@ body {
     outline: 0;
     border-bottom:1px solid whitesmoke;
 
-    font-size: 1.4rem;
+    font-size: 1rem;
     color: whitesmoke;
+    padding-left: 9px;
+    letter-spacing: 0.08em;
 }
 .input-icon {
-    width: 8%;
+    width: 7%;
     padding-left: 6px;
     padding-bottom: 6px;
     border-bottom:1px solid whitesmoke;
@@ -82,7 +86,7 @@ body {
     outline: 0;
     padding: 12px 156px;
     color: whitesmoke;
-    background-color: #018ccf;
+    background-color: rgb(1, 140, 207, .88);
     letter-spacing: 0.6rem;
     cursor: pointer;
 }
