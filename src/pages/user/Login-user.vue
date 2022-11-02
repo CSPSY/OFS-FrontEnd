@@ -13,7 +13,12 @@
             <button class="login-btn">登录</button>
         </div>
         <div class="items-text" style="margin-bottom: 6px;">
-            <router-link :to="{path: '/register'}">点击此处注册账号</router-link>
+            <div class="text-left">
+                <router-link :to="{path: '/register-user'}">注册账号</router-link>
+            </div>
+            <div class="text-right">
+                <router-link :to="{path: '/login-merchant'}">切换商家</router-link>
+            </div>
         </div>
     </div>
 </template>
@@ -27,12 +32,12 @@ export default {
 </script>
 
 <style>
-@import "../css/input.css";
+@import "../../css/input.css";
 body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-image: url('../../public/login-register-bg.jpg');
+    background-image: url('../../../public/login-register-bg.jpg');
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -98,9 +103,21 @@ body {
 .items-text a {
     text-decoration: none;
     font-size: 1.2rem;
-    /* font-weight: 600; */
     letter-spacing: 0.05rem;
     color: whitesmoke;
     cursor: pointer;
+}
+.items-text a:hover, .login-btn:hover {
+    color: rgb(223, 218, 218);
+}
+.text-left {
+    padding-left: 18px;
+    width: 50%;
+}
+.text-right {
+    width: 50%;
+    padding-right: 18px;
+    display: flex;
+    justify-content: end;
 }
 </style>

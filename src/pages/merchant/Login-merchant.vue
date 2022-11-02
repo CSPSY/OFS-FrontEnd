@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-        <h2 class="card-title">OFS 在线食品购物</h2>
+        <h2 class="card-title">OFS 商家管理平台</h2>
         <div class="items">
             <icon-user class="input-icon" />
             <input type="text" placeholder="请输入账号" class="input-item" />
@@ -9,43 +9,35 @@
             <icon-lock class="input-icon" />
             <input type="password" placeholder="请输入密码" class="input-item" />
         </div>
-        <div class="items" style="margin-bottom: 35px">
-            <input style="width: 100%; padding-bottom: 8px;" type="password" placeholder="请确认密码" class="input-item" />
-        </div>
-        <div class="items-lr">
-            <div class="left">
-                <icon-email class="input-icon" />
-                <input type="text" placeholder="请输入邮箱" class="input-item" required>
-            </div>
-            <div class="right">
-                <input type="text" placeholder="邮箱验证码" class="input-item" required>
-                <button class="captcha-btn" @click="">获取</button>
-            </div>  
-        </div>
         <div class="items">
-            <button class="register-btn">注册</button>
+            <button class="login-btn">登录</button>
         </div>
         <div class="items-text" style="margin-bottom: 6px;">
-            <router-link :to="{path: '/login'}">点击此处返回登录</router-link>
+            <div class="text-left">
+                <router-link :to="{path: '/register-merchant'}">注册账号</router-link>
+            </div>
+            <div class="text-right">
+                <router-link :to="{path: '/login-user'}">切换用户</router-link>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-import { IconUser, IconLock, IconEmail, IconCheckCircleFill } from '@arco-design/web-vue/es/icon';
+import { IconUser, IconLock } from '@arco-design/web-vue/es/icon';
 export default {
-    components: { IconUser, IconLock, IconEmail, IconCheckCircleFill },
+    components: { IconUser, IconLock },
     name: 'Login'
 };
 </script>
 
 <style>
-@import "../css/input.css";
+@import "../../css/input.css";
 body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-image: url('../../public/login-register-bg.jpg');
+    background-image: url('../../../public/login-register-bg.jpg');
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -92,20 +84,7 @@ body {
     padding-bottom: 6px;
     border-bottom:1px solid whitesmoke;
 }
-.items-text {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 24px;
-}
-.items-text a {
-    text-decoration: none;
-    font-size: 1.2rem;
-    /* font-weight: 600; */
-    letter-spacing: 0.05rem;
-    color: whitesmoke;
-    cursor: pointer;
-}
-.register-btn {
+.login-btn {
     border-radius: 5px;
     font-size: 1.3rem;
     border: 0;
@@ -116,39 +95,29 @@ body {
     letter-spacing: 0.6rem;
     cursor: pointer;
 }
-
-.items-lr {
+.items-text {
     display: flex;
-    width: 512px;
-    margin-bottom: 32px;
+    justify-content: center;
+    margin-bottom: 24px;
 }
-
-.left, .right {
-    display: flex;
-}
-.left {
-    width: 58%;
-}
-.left input, .right input {
-    padding-bottom: 4px;
-    font-size: 1rem;
-}
-.left .input-icon {
-    width: 14%;
-}
-.right {
-    right: 30%;
-    margin-left: 30px;
-}
-.captcha-btn {
-    width: 50%;
-    border-radius: 5px;
-    margin-left: 12px;
-    border: 0;
-    outline: 0;
+.items-text a {
+    text-decoration: none;
+    font-size: 1.2rem;
+    letter-spacing: 0.05rem;
     color: whitesmoke;
-    background-color: rgb(1, 140, 207, .88);
-    letter-spacing: 0.22em;
     cursor: pointer;
+}
+.items-text a:hover, .login-btn:hover {
+    color: rgb(223, 218, 218);
+}
+.text-left {
+    padding-left: 18px;
+    width: 50%;
+}
+.text-right {
+    width: 50%;
+    padding-right: 18px;
+    display: flex;
+    justify-content: end;
 }
 </style>
