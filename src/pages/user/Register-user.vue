@@ -1,3 +1,7 @@
+<script setup>
+import { IconUser, IconLock, IconEmail, IconCheckCircleFill } from '@arco-design/web-vue/es/icon';
+</script>
+
 <template>
     <div class="card">
         <h2 class="card-title">OFS 在线食品购物</h2>
@@ -26,26 +30,18 @@
             <button class="register-btn">注册</button>
         </div>
         <div class="items-text" style="margin-bottom: 6px;">
-            <router-link :to="{path: '/login'}">点击此处返回登录</router-link>
+            <router-link :to="{path: '/login-user'}">点击此处返回登录</router-link>
         </div>
     </div>
 </template>
 
-<script>
-import { IconUser, IconLock, IconEmail, IconCheckCircleFill } from '@arco-design/web-vue/es/icon';
-export default {
-    components: { IconUser, IconLock, IconEmail, IconCheckCircleFill },
-    name: 'Login'
-};
-</script>
-
 <style>
-@import "../css/input.css";
+@import "../../css/input.css";
 body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-image: url('../../public/login-register-bg.jpg');
+    background-image: url('../../../public/login-register-bg.jpg');
     background-repeat: no-repeat;
     background-size: cover;
 }

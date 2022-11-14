@@ -9,17 +9,45 @@ const routes = [
         } 
     },
     {
-        path: '/login',
-        component: () => import('../pages/Login.vue'),
+        path: '/login-user',
+        component: () => import('../pages/user/Login-user.vue'),
         meta: {
-            title: '登录'
+            title: '用户登录'
         }
     },
     {
-        path: '/register',
-        component: () => import('../pages/Register.vue'),
+        path: '/login-merchant',
+        component: () => import('../pages/merchant/Login-merchant.vue'),
         meta: {
-            title: '注册'
+            title: '商家后台登录'
+        }
+    },
+    {
+        path: '/login-admin',
+        component: () => import('../pages/admin/Login-admin.vue'),
+        meta: {
+            title: '管理员登录'
+        }
+    },
+    {
+        path: '/register-user',
+        component: () => import('../pages/user/Register-user.vue'),
+        meta: {
+            title: '用户注册'
+        }
+    },
+    {
+        path: '/register-merchant',
+        component: () => import('../pages/merchant/Register-merchant.vue'),
+        meta: {
+            title: '商家注册'
+        }
+    },
+    {
+        path: '/register-admin',
+        component: () => import('../pages/admin/Register-admin.vue'),
+        meta: {
+            title: '管理员注册'
         }
     }
 ];

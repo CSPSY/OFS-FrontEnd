@@ -1,6 +1,10 @@
+<script setup>
+import { IconUser, IconLock } from '@arco-design/web-vue/es/icon';
+</script>
+
 <template>
     <div class="card">
-        <h2 class="card-title">OFS 在线食品购物</h2>
+        <h2 class="card-title">OFS 商家管理平台</h2>
         <div class="items">
             <icon-user class="input-icon" />
             <input type="text" placeholder="请输入账号" class="input-item" />
@@ -13,26 +17,20 @@
             <button class="login-btn">登录</button>
         </div>
         <div class="items-text" style="margin-bottom: 6px;">
-            <router-link :to="{path: '/register'}">点击此处注册账号</router-link>
+            <div class="text-left">
+                <router-link :to="{path: '/register-merchant'}">注册账号</router-link>
+            </div>
+            <div class="text-right">
+                <router-link :to="{path: '/login-user'}">切换用户</router-link>
+            </div>
         </div>
     </div>
 </template>
 
-<script>
-import { IconUser, IconLock } from '@arco-design/web-vue/es/icon';
-export default {
-    components: { IconUser, IconLock },
-    name: 'Login'
-};
-</script>
-
 <style>
-@import "../css/input.css";
+@import "../../css/input.css";
 body {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    background-image: url('../../public/login-register-bg.jpg');
+    background-image: url('../../../public/login-register-bg.jpg');
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -98,9 +96,21 @@ body {
 .items-text a {
     text-decoration: none;
     font-size: 1.2rem;
-    /* font-weight: 600; */
     letter-spacing: 0.05rem;
     color: whitesmoke;
     cursor: pointer;
+}
+.items-text a:hover, .login-btn:hover {
+    color: rgb(223, 218, 218);
+}
+.text-left {
+    padding-left: 18px;
+    width: 50%;
+}
+.text-right {
+    width: 50%;
+    padding-right: 18px;
+    display: flex;
+    justify-content: end;
 }
 </style>

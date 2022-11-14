@@ -1,23 +1,330 @@
-<template>
-    <h2 class="title">
-        这里是首页
-    </h2>
-</template>
+<script setup>
+import { ref, reactive } from 'vue';
+import { IconUser } from '@arco-design/web-vue/es/icon';
+import '@arco-design/web-vue/dist/arco.css';
+const images = reactive([
+    'src/assets/imgs/cake.jpg',
+    'src/assets/imgs/cherry.jpg',
+    'src/assets/imgs/lemon.jpg',
+    'src/assets/imgs/orange.jpg',
+    'src/assets/imgs/peach.jpg',
+    'src/assets/imgs/pear.jpg',
+    'src/assets/imgs/pizza.jpg',
+    'src/assets/imgs/tabasco.jpg'
+]);
+const itemsData = [
+    {
+        imgAdr: 'src/assets/imgs/cake.jpg',
+        desc: `这个美味的蛋糕，美味的蛋糕，美味的蛋糕\n有着樱桃，有着樱桃\n有着巧克力`
+    },
+    {
+        imgAdr: 'src/assets/imgs/cherry.jpg',
+        desc: `这个美味的蛋糕，美味的蛋糕，美味的蛋糕\n有着樱桃，有着樱桃\n有着巧克力`
+    },
+    {
+        imgAdr: 'src/assets/imgs/lemon.jpg',
+        desc: `这个美味的蛋糕，美味的蛋糕，美味的蛋糕\n有着樱桃，有着樱桃\n有着巧克力`
+    },
+    {
+        imgAdr: 'src/assets/imgs/orange.jpg',
+        desc: `这个美味的蛋糕，美味的蛋糕，美味的蛋糕\n有着樱桃，有着樱桃\n有着巧克力`
+    },
+    {
+        imgAdr: 'src/assets/imgs/peach.jpg',
+        desc: `这个美味的蛋糕，美味的蛋糕，美味的蛋糕\n有着樱桃，有着樱桃\n有着巧克力`
+    },
+    {
+        imgAdr: 'src/assets/imgs/pear.jpg',
+        desc: `这个美味的蛋糕，美味的蛋糕，美味的蛋糕\n有着樱桃，有着樱桃\n有着巧克力`
+    },
+    {
+        imgAdr: 'src/assets/imgs/pizza.jpg',
+        desc: `这个美味的蛋糕，美味的蛋糕，美味的蛋糕\n有着樱桃，有着樱桃\n有着巧克力`
+    },
+    {
+        imgAdr: 'src/assets/imgs/tabasco.jpg',
+        desc: `这个美味的蛋糕，美味的蛋糕，美味的蛋糕\n有着樱桃，有着樱桃\n有着巧克力`
+    }
+];
+// data 数据
+const data = reactive({
+    items: itemsData,
+    searchFrame: false
+})
 
-<script>
-const Index = {
-    name: 'index'
-};
-export { Index };
+// 导航栏搜索框是否展示，判断搜索框到顶部距离
+let showSearchFrame = () => {
+    let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    data.searchFrame = scrollTop > 160;
+}
+window.addEventListener("scroll", showSearchFrame);
 </script>
 
-<style scoped>
-.title {
-    font-size:  3rem;
-    font-weight: 200;
-    text-align: center;
-    opacity: 0.6;
-    margin: 200px 0;
-    letter-spacing: .3rem;
-}
+<template>
+    <header id="header">
+        <nav>
+            <a href="#" class="nav-title">O F S</a>
+            <div class="left">
+                <li class="nav-text">个性化设置</li>
+            </div>
+            <div style="width: 660px; display: flex;">
+                <a-input-search v-show="data.searchFrame" style="width: 640px; height: 34px; margin: 0 10px; align-self: center;" placeholder="输入想要的食品" />
+            </div>
+            <div class="right">
+                <li class="nav-text">购物车</li>
+                <li class="nav-text">我的订单</li>
+                <li class="nav-text">联系客服</li>
+            </div>
+        </nav>
+    </header>
+    <section class="content">
+        <section class="main">
+            <div class="search-bar">
+                <h2 class="title">O F S</h2>
+                <a-input-search class="search-merchant" placeholder="输入想要的食品" />
+            </div>
+            <div class="list-bar">
+                <div class="classify">
+                    <h3 style="font-weight: 460; padding-left: 6px; font-size: 1.3rem; margin-bottom: 18px;">分类</h3>
+                    <div class="list-items">
+                        <li class="classify-items">
+                            <a href="#">水果</a>
+                        </li>
+                        <li class="classify-items">
+                            <a href="#">蔬菜</a>
+                        </li>
+                        <li class="classify-items">
+                            <a href="#">肉品</a>
+                        </li>
+                        <li class="classify-items">
+                            <a href="#">水产</a>
+                        </li>
+                        <li class="classify-items">
+                            <a href="#">干货</a>
+                        </li>
+                        <li class="classify-items">
+                            <a href="#">日配</a>
+                        </li>
+                        <li class="classify-items">
+                            <a href="#">熟食</a>
+                        </li>
+                        <li class="classify-items">
+                            <a href="#">糕点</a>
+                        </li>
+                    </div>
+                </div>
+                <div class="image-list">
+                    <a-carousel
+                        :style="{
+                            width: '100%',
+                            height: '100%'
+                        }"
+                        :auto-play="true"
+                        indicator-type="dot"
+                        show-arrow="hover"
+                    >
+                        <a-carousel-item v-for="image in images">
+                        <img
+                            :src="image"
+                            :style="{
+                                width: '100%',
+                                height: '100%'
+                            }"
+                        />
+                        </a-carousel-item>
+                    </a-carousel>
+                </div>
+                <div class="personal-info">
+                    <div class="member-bd">
+                        <icon-user :style="{fontSize:'82px', color: '#666666', margin: '0 auto 6px'}" />
+                        <p :style="{fontSize: '1.2rem', letterSpacing: '0.12rem', textAlign: 'center'}">Hi! 你好</p>
+                    </div>
+                    <div class="button-items">
+                        <a-button shape="round" href="/login-user">登录</a-button>
+                        <a-button shape="round" href="/register-user">注册</a-button>
+                        <a-button shape="round" href="/login-merchant">店铺</a-button>
+                    </div>  
+                </div>
+            </div>
+            <div class="list-items">
+                <div class="item" v-for="item in data.items">
+                    <a-row style="display: flex;">
+                        <!-- <img src="item.imgAdr" alt="the merchant images"> -->
+                        <a-col :span="4">
+                            <img src="src/assets/imgs/cake.jpg" alt="the merchant images">
+                        </a-col>
+                        <a-col :span="16" style="border-left: 1px #9698a3 solid; height: 122px; padding: 12px 16px;">
+                            <p style="white-space: pre-wrap; line-height: 1.6rem;">{{item.desc}}</p>
+                        </a-col>
+                        <a-col :span="4" class="item-control">
+                            <a-button  shape="round" style="padding: 16px 0; border-radius: 6px;">加入购物车</a-button>
+                            <a-button  shape="round" style="padding: 16px 0; border-radius: 6px;">查看商品   </a-button>
+                        </a-col>
+                    </a-row>
+                </div>
+            </div>
+        </section>
+    </section>
+    <footer>
+        <p class="title" style="font-size: 1.2rem;">OFS 在线食品购物</p>
+    </footer>
+</template>
+
+<style>
+    body {
+        background-color: #e6e5e5;
+    }
+    #header {
+        display: flex;
+        justify-content: center;
+        position: sticky;
+        top: 0;
+        z-index: 111;
+        height: 46px;
+        background-color: #fefeff;
+    }
+    #header nav {
+        width: 1190px;
+        display: flex;
+    }
+    .nav-title {
+        align-self: center;
+        font-size: 2rem;
+        margin: 0 42px 0 16px;
+        letter-spacing: .1rem;
+        font-weight: 200;
+        text-align: left;
+        color: black;
+    }
+    .nav-text {
+        line-height: 46px;
+        height: 100%;
+        font-size: 1.1rem;
+        font-weight: 200;
+        padding: 0 12px;
+    }
+    .nav-text:hover {
+        cursor: pointer;
+        border-bottom: 1.6px rgba(102, 102, 102, .7) solid;
+        color: rgb(82, 66, 44);
+    }
+    #header nav .right {
+        display: flex;
+        /* margin-left: 660px; */
+    }
+    .content {
+        display: flex;
+        justify-content: center;
+    }
+    .main {
+        width: 1190px;
+        display: flex;
+        flex-direction: column;
+    }
+    .title {
+        font-size: 3.6rem;
+        font-weight: 200;
+        text-align: center;
+        opacity: 0.6;
+        margin: 12px 0;
+        letter-spacing: .3rem;
+    }
+    .search-bar {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 22px;
+    }
+    .search-merchant {
+        width: 766px;
+        height: 42px;
+        border-radius: 6px;
+        align-self: center;
+    }
+    .list-bar {
+        display: flex;
+        margin-bottom: 26px;
+    }
+    .list-bar .classify {
+        width: 22%;
+        margin: 0 7px;
+        padding: 36px 12px 18px 22px;
+        background-color: #fefeff;
+        border-radius: 8px;
+    }
+    .list-bar .image-list {
+        width: 54%;
+        margin-right: 7px;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+    .list-bar .personal-info {
+        width: 24%;
+        padding: 22px 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+    .classify .list-items {
+        display: flex;
+        flex-flow: wrap;
+        flex-direction: row;
+    }
+    .classify-items {
+        width: 50%;
+        padding: 12px 6px;
+    }
+    .classify-items:hover {
+        background-color: rgba(0, 0, 0, .06);
+        border-radius: 6px;
+    }
+    .classify-items a {
+        border-left: 1px black solid;
+        padding: 6px 28px 6px 5px;
+        width: 100%;
+        opacity: .8;
+        font-size: 1rem;
+        color: black;
+    }
+    .personal-info .member-bd {
+        padding: 16px 0 0;
+        display: flex;
+        flex-direction: column;
+    }
+    .personal-info .button-items {
+        padding: 0 6px;
+        display: flex;
+        justify-content: space-around;
+    }
+    .personal-info .button-items a {
+        height: 36px;
+        width: 82px;
+    }
+    .list-items {
+        padding: 0 6px;
+        margin-bottom: 6px;
+    }
+    .list-items .item {
+        height: 151px;
+        padding: 13px 20px;
+        margin-bottom: 12px;
+        border-radius: 6px;
+        background-color: #fefeff;
+    }
+    .list-items .item img {
+        height: 122px;
+        width: auto;
+    }
+    .list-items .item .item-control {
+        align-self: center;
+        display:flex;
+        flex-direction: column;
+        justify-content: space-around;
+        padding: 0 26px;
+        height: 100px;
+    }
+    footer {
+        display: flex;
+        justify-content: center;
+        height: 72px;
+    }
 </style>
