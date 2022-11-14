@@ -61,14 +61,14 @@ window.addEventListener("scroll", showSearchFrame);
 </script>
 
 <template>
-    <header>
+    <header id="header">
         <nav>
             <a href="#" class="nav-title">O F S</a>
             <div class="left">
                 <li class="nav-text">个性化设置</li>
             </div>
             <div style="width: 660px; display: flex;">
-                <a-input-search v-show="data.searchFrame" class="search-merchant" style="width: 640px; height: 34px; margin: 0 10px;" placeholder="输入想要的食品" />
+                <a-input-search v-show="data.searchFrame" style="width: 640px; height: 34px; margin: 0 10px; align-self: center;" placeholder="输入想要的食品" />
             </div>
             <div class="right">
                 <li class="nav-text">购物车</li>
@@ -174,7 +174,7 @@ window.addEventListener("scroll", showSearchFrame);
     body {
         background-color: #e6e5e5;
     }
-    header {
+    #header {
         display: flex;
         justify-content: center;
         position: sticky;
@@ -183,7 +183,7 @@ window.addEventListener("scroll", showSearchFrame);
         height: 46px;
         background-color: #fefeff;
     }
-    header nav {
+    #header nav {
         width: 1190px;
         display: flex;
     }
@@ -208,7 +208,7 @@ window.addEventListener("scroll", showSearchFrame);
         border-bottom: 1.6px rgba(102, 102, 102, .7) solid;
         color: rgb(82, 66, 44);
     }
-    header nav .right {
+    #header nav .right {
         display: flex;
         /* margin-left: 660px; */
     }
@@ -235,7 +235,7 @@ window.addEventListener("scroll", showSearchFrame);
         margin-bottom: 22px;
     }
     .search-merchant {
-        width: 720px;
+        width: 766px;
         height: 42px;
         border-radius: 6px;
         align-self: center;
