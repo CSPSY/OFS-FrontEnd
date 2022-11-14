@@ -1,3 +1,7 @@
+<script setup>
+import { IconUser, IconLock, IconEmail, IconCheckCircleFill } from '@arco-design/web-vue/es/icon';
+</script>
+
 <template>
     <div class="card">
         <h2 class="card-title">OFS 在线食品购物</h2>
@@ -30,14 +34,6 @@
         </div>
     </div>
 </template>
-
-<script>
-import { IconUser, IconLock, IconEmail, IconCheckCircleFill } from '@arco-design/web-vue/es/icon';
-export default {
-    components: { IconUser, IconLock, IconEmail, IconCheckCircleFill },
-    name: 'Login'
-};
-</script>
 
 <style>
 @import "../../css/input.css";

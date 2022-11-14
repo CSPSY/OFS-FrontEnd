@@ -1,3 +1,7 @@
+<script setup>
+import { IconUser, IconLock, IconEmail, IconCheckCircleFill } from '@arco-design/web-vue/es/icon';
+</script>
+
 <template>
     <div class="card">
         <h2 class="card-title">OFS 商家管理平台</h2>
@@ -31,20 +35,9 @@
     </div>
 </template>
 
-<script>
-import { IconUser, IconLock, IconEmail, IconCheckCircleFill } from '@arco-design/web-vue/es/icon';
-export default {
-    components: { IconUser, IconLock, IconEmail, IconCheckCircleFill },
-    name: 'Login'
-};
-</script>
-
 <style>
 @import "../../css/input.css";
 body {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
     background-image: url('../../../public/login-register-bg.jpg');
     background-repeat: no-repeat;
     background-size: cover;
