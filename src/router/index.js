@@ -64,6 +64,14 @@ const routes = [
         meta: {
             title: '商品管理'
         }
+    },
+    {
+        path: '/admin/management',
+        name: '后台管理系统',
+        component: () => import('../pages/admin/index.vue'),
+        meta: {
+            title: '后台管理系统'
+        }
     }
 ];
 

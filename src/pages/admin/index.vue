@@ -1,7 +1,7 @@
 <script setup>
 import { defineComponent, reactive } from 'vue';
 import { Message } from '@arco-design/web-vue';
-import { IconCaretLeft, IconGift, IconCalendar, IconMenuUnfold, IconDashboard } from '@arco-design/web-vue/es/icon';
+import { IconCaretLeft, IconGift, IconSafe, IconMenuUnfold, IconDashboard, IconUserGroup } from '@arco-design/web-vue/es/icon';
 
 // data 数据
 const data = reactive({
@@ -9,19 +9,19 @@ const data = reactive({
         username: 'devleoper'
     },
     navText: {
-        first: '商品管理',
-        second: '商品信息修改'
+        first: '用户管理',
+        second: '用户信息修改'
     }
 });
 
 // nav 显示信息
 const infoMap = new Map([
-    ['1_1', '商品信息修改'], ['1_2', '商品分类'], ['1_3', '商品添加'], ['1_4', '商品下架'],
-    ['2_1', '订单修改'], ['2_2', '订单撤销']
+    ['1_1', '用户信息修改'], ['1_2', '用户添加'], ['1_3', '用户删除'],
+    ['2', '商品审核'], ['3', '数据统计']
 ]);
 
 const onClickMenuItem = (key) => {
-    data.navText.first = key > '1_4' ? key === '3' ? '数据统计' : '订单管理' : '商品管理';
+    data.navText.first = key > '1_3' ? '' : '用户管理';
     data.navText.second = infoMap.get(key);
 };
 </script>
@@ -38,21 +38,16 @@ const onClickMenuItem = (key) => {
             >
                 <a-sub-menu key="1">
                     <template #title>
-                        <IconGift></IconGift> 商品管理
+                        <icon-user-group /> 用户管理
                     </template>
-                    <a-menu-item key="1_1">商品信息修改</a-menu-item>
-                    <a-menu-item key="1_2">商品分类</a-menu-item>
-                    <a-menu-item key="1_3">商品添加</a-menu-item>
-                    <a-menu-item key="1_4">商品下架</a-menu-item>
+                    <a-menu-item key="1_1">用户信息修改</a-menu-item>
+                    <a-menu-item key="1_2">用户添加</a-menu-item>
+                    <a-menu-item key="1_3">用户删除</a-menu-item>
                 </a-sub-menu>
-                <a-sub-menu key="2">
-                    <template #title>
-                        <IconCalendar></IconCalendar> 订单管理
-                    </template>
-                    <a-menu-item key="2_1">订单修改</a-menu-item>
-                    <a-menu-item key="2_2">订单撤销</a-menu-item>
-                    <!-- <a-menu-item key="2_3">订单增加</a-menu-item> -->
-                </a-sub-menu>   
+                <a-menu-item key="2">
+                    <icon-safe />
+                    商品审核
+                </a-menu-item>
                 <a-menu-item key="3">
                     <icon-dashboard />
                     数据统计
@@ -75,7 +70,7 @@ const onClickMenuItem = (key) => {
                     <a-breadcrumb-item v-if="data.navText.second">{{data.navText.second}}</a-breadcrumb-item>
                 </a-breadcrumb>
                 <a-layout-content>Content</a-layout-content>
-                <a-layout-footer style="letter-spacing: .06rem;">O F S 商家管理平台</a-layout-footer>
+                <a-layout-footer style="letter-spacing: .06rem;">O F S 后台管理系统</a-layout-footer>
             </a-layout>
         </a-layout>
     </a-layout>
