@@ -1,0 +1,39 @@
+#header {
+    display: flex;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 111;
+    height: 46px;
+    background-color: #fefeff;
+    margin-bottom: 22px;
+}
+#header nav {
+    width: 1190px;
+    display: flex;
+}
+.nav-title {
+    align-self: center;
+    font-size: 2rem;
+    margin: 0 42px 0 16px;
+    letter-spacing: .1rem;
+    font-weight: 200;
+    text-align: left;
+    color: black;
+}
+.nav-text {
+    line-height: 46px;
+    height: 100%;
+    font-size: 1.1rem;
+    font-weight: 200;
+    padding: 0 12px;
+}
+.nav-text:hover {
+    cursor: pointer;
+    border-bottom: 1.6px rgba(102, 102, 102, .7) solid;
+    color: rgb(82, 66, 44);
+}
+#header nav .right {
+    display: flex;
+    /* margin-left: 660px; */
+}

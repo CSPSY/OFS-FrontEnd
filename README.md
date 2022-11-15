@@ -18,4 +18,8 @@ OFS 在线食品系统是基于 Web 的在线食品零售网站项目。<br>
 
 本项目前端部分采用 Vue + arco.design 实现
 
-运行方法： `npm run dev`
+### 运行方法
+
+先安装依赖包：`npm install`
+
+再启动项目： `npm run dev`
