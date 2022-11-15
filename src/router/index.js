@@ -56,6 +56,14 @@ const routes = [
         meta: {
             title: '管理员注册'
         }
+    },
+    {
+        path: '/merchant/management',
+        name: '商品管理',
+        component: () => import('../pages/merchant/index.vue'),
+        meta: {
+            title: '商品管理'
+        }
     }
 ];
 
