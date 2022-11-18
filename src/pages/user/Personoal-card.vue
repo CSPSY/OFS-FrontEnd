@@ -1,14 +1,6 @@
-// 虚拟数据
-const images = [
-    '/src/assets/imgs/cake.jpg',
-    '/src/assets/imgs/cherry.jpg',
-    '/src/assets/imgs/lemon.jpg',
-    '/src/assets/imgs/orange.jpg',
-    '/src/assets/imgs/peach.jpg',
-    '/src/assets/imgs/pear.jpg',
-    '/src/assets/imgs/pizza.jpg',
-    '/src/assets/imgs/tabasco.jpg'
-];
+<script setup>
+import { IconThumbUp, IconShareInternal, IconMore } from '@arco-design/web-vue/es/icon';
+import { reactive } from 'vue';
 
 const itemsData = [
     {
@@ -77,4 +69,60 @@ const itemsData = [
     }
 ];
 
-export { images, itemsData };
+// data 数据
+const data = reactive({
+    items: itemsData
+});
+
+</script>
+
+<template>
+    <a-card :style="{ width: '460px' }">
+    <template #actions>
+        <span class="icon-hover"> <IconThumbUp /> </span>
+        <span class="icon-hover"> <IconShareInternal /> </span>
+        <span class="icon-hover"> <IconMore /> </span>
+    </template>
+    <template #cover>
+    <div
+        :style="{
+            height: '22 0px',
+            overflow: 'hidden',
+        }"
+    >
+        <img
+            :style="{ width: '100%', height: '100%' }"
+            alt="dessert"
+            :src="data.items[0].imgAdr"
+        />
+    </div>
+    </template>
+    <a-card-meta title="Card Title" description="This is the description">
+    <template #avatar>
+        <div
+            :style="{ display: 'flex', alignItems: 'center', color: '#1D2129' }"
+        >
+            <a-avatar :size="24" :style="{ marginRight: '8px' }">
+                A
+            </a-avatar>
+            <a-typography-text>Username</a-typography-text>
+        </div>
+    </template>
+    </a-card-meta>
+</a-card>
+</template>
+
+<style scoped>
+.icon-hover {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    transition: all 0.1s;
+}
+.icon-hover:hover {
+    background-color: rgb(var(--gray-2));
+}
+</style>

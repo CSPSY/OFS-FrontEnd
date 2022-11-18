@@ -2,73 +2,25 @@
 import { reactive } from 'vue';
 import { IconUser } from '@arco-design/web-vue/es/icon';
 import '@arco-design/web-vue/dist/arco.css';
+import PersonalCard from './user/Personoal-card.vue';
+import GoodsCard from './user/Goods-card.vue';
+import { images, itemsData } from '../utils/index.js';
 
-const images = [
-    'src/assets/imgs/cake.jpg',
-    'src/assets/imgs/cherry.jpg',
-    'src/assets/imgs/lemon.jpg',
-    'src/assets/imgs/orange.jpg',
-    'src/assets/imgs/peach.jpg',
-    'src/assets/imgs/pear.jpg',
-    'src/assets/imgs/pizza.jpg',
-    'src/assets/imgs/tabasco.jpg'
-];
-const itemsData = [
-    {
-        imgAdr: 'src/assets/imgs/cake.jpg',
-        desc: `这个美味的蛋糕，美味的蛋糕，美味的蛋糕\n有着樱桃，有着樱桃\n有着巧克力`,
-        price: '35.7',
-        memberPrice: '29.8'
-    },
-    {
-        imgAdr: 'src/assets/imgs/cherry.jpg',
-        desc: `这个美味的蛋糕，美味的蛋糕，美味的蛋糕\n有着樱桃，有着樱桃\n有着巧克力`,
-        price: '35.7',
-        memberPrice: '29.8'
-    },
-    {
-        imgAdr: 'src/assets/imgs/lemon.jpg',
-        desc: `这个美味的蛋糕，美味的蛋糕，美味的蛋糕\n有着樱桃，有着樱桃\n有着巧克力`,
-        price: '35.7',
-        memberPrice: '0'
-    },
-    {
-        imgAdr: 'src/assets/imgs/orange.jpg',
-        desc: `这个美味的蛋糕，美味的蛋糕，美味的蛋糕\n有着樱桃，有着樱桃\n有着巧克力`,
-        price: '35.7',
-        memberPrice: '29.8'
-    },
-    {
-        imgAdr: 'src/assets/imgs/peach.jpg',
-        desc: `这个美味的蛋糕，美味的蛋糕，美味的蛋糕\n有着樱桃，有着樱桃\n有着巧克力`,
-        price: '35.7',
-        memberPrice: '29.8'
-    },
-    {
-        imgAdr: 'src/assets/imgs/pear.jpg',
-        desc: `这个美味的蛋糕，美味的蛋糕，美味的蛋糕\n有着樱桃，有着樱桃\n有着巧克力`,
-        price: '35.7',
-        memberPrice: '29.8'
-    },
-    {
-        imgAdr: 'src/assets/imgs/pizza.jpg',
-        desc: `这个美味的蛋糕，美味的蛋糕，美味的蛋糕\n有着樱桃，有着樱桃\n有着巧克力`,
-        price: '35.7',
-        memberPrice: '29.8'
-    },
-    {
-        imgAdr: 'src/assets/imgs/tabasco.jpg',
-        desc: `这个美味的蛋糕，美味的蛋糕，美味的蛋糕\n有着樱桃，有着樱桃\n有着巧克力`,
-        price: '35.7',
-        memberPrice: '29.8'
-    }
-];
 // data 数据
 const data = reactive({
     items: itemsData,
-    images: images,
-    searchFrame: false
-})
+    images,
+    // 导航栏搜索框显示
+    searchFrame: false,
+    // 个性化设置卡片显示
+    showPersonal: false,
+    // 商品详情卡片显示
+    showGoodsDesc: false,
+    // 子组件传值
+    goodsItem: {},
+    // 是否显示遮罩层
+    showCoverLayer: false
+});
 
 // 导航栏搜索框是否展示，判断搜索框到顶部距离
 let showSearchFrame = () => {
@@ -76,6 +28,21 @@ let showSearchFrame = () => {
     data.searchFrame = scrollTop > 160;
 }
 window.addEventListener("scroll", showSearchFrame);
+
+// 展示个性化设置卡片
+const setPersonal = () => {
+    data.showPersonal = true;
+    data.showCoverLayer = true;
+};
+
+// 显示商品详情卡片
+const showDescCard = (id) => {
+    data.showGoodsDesc = true;
+    data.showCoverLayer = true;
+    data.goodsItem = data.items[id - 1];
+    console.log(data.goodsItem)
+};
+
 </script>
 
 <template>
@@ -84,7 +51,8 @@ window.addEventListener("scroll", showSearchFrame);
             <nav>
                 <a href="#" class="nav-title">O F S</a>
                 <div class="left">
-                    <li class="nav-text">个性化设置</li>
+                    <li class="nav-text" @click="setPersonal">个性化设置</li>
+                    <personal-card class="card-center" v-show="data.showPersonal"></personal-card>
                 </div>
                 <div style="width: 660px; display: flex;">
                     <a-input-search v-show="data.searchFrame" style="width: 640px; height: 34px; margin: 0 10px; align-self: center;" placeholder="输入想要的食品" />
@@ -166,13 +134,13 @@ window.addEventListener("scroll", showSearchFrame);
                     </div>
                 </div>
                 <div class="list-items">
-                    <div class="item" v-for="item in data.items">
+                    <div class="item" v-for="item in data.items" :key="item.id">
                         <a-row style="display: flex;">
-                            <!-- <img src="item.imgAdr" alt="the merchant images"> -->
                             <a-col :span="4">
-                                <img src="src/assets/imgs/cake.jpg" alt="the merchant images">
+                                <img :src="item.imgAdr" alt="the merchant images" style="width: 94%;" >
                             </a-col>
-                            <a-col :span="10" style="border-left: 1px #9698a3 solid; height: 122px; padding: 12px 16px;">
+                            <a-col :span="10" style="border-left: 1px #9698a3 solid; height: 122px; padding: 6px 16px 12px;">
+                                <h3 style="margin-bottom: 12px;">{{item.name}}</h3>
                                 <p style="white-space: pre-wrap; line-height: 1.6rem;">{{item.desc}}</p>
                             </a-col>
                             <a-col style="display: flex; justify-content: center; align-items: center; height: 122px;" :span="6">
@@ -183,8 +151,9 @@ window.addEventListener("scroll", showSearchFrame);
                                 </p>
                             </a-col>
                             <a-col :span="4" class="item-control">
-                                <a-button  shape="round" style="padding: 16px 0; border-radius: 6px;">加入购物车</a-button>
-                                <a-button  shape="round" style="padding: 16px 0; border-radius: 6px;">查看商品   </a-button>
+                                <a-button shape="round" style="padding: 16px 0; border-radius: 6px;">加入购物车</a-button>
+                                <a-button shape="round" style="padding: 16px 0; border-radius: 6px;" @click="showDescCard(item.id)">查看商品</a-button>
+                                <goods-card class="card-center desc-card" :goods-desc="data.goodsItem" v-show="data.showGoodsDesc"></goods-card>
                             </a-col>
                         </a-row>
                     </div>
@@ -195,6 +164,7 @@ window.addEventListener("scroll", showSearchFrame);
             <p class="title" style="font-size: 1.2rem;">OFS 在线食品购物</p>
         </footer>
     </div>
+    <div class="cover-layer" v-show="data.showCoverLayer"></div>
 </template>
 
 <style scoped>
@@ -219,7 +189,7 @@ window.addEventListener("scroll", showSearchFrame);
     margin: 12px 0;
     letter-spacing: .3rem;
 }
-.search-bar {
+.search-bar {   
     display: flex;
     flex-direction: column;
     margin-bottom: 22px;
@@ -315,6 +285,28 @@ window.addEventListener("scroll", showSearchFrame);
     justify-content: space-around;
     padding: 0 26px;
     height: 100px;
+}
+/* 显示卡片 */
+.card-center {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 32%);
+}
+/* 商品详情卡片 */
+.desc-card {
+    z-index: 131;
+    transform: translate(-50%, -55%);
+}
+/* 遮罩层 */
+.cover-layer {
+    position: fixed;
+    z-index: 121;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, .6);
 }
 footer {
     display: flex;

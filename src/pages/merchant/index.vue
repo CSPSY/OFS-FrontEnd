@@ -88,6 +88,7 @@ const onClickMenuItem = (key) => {
     border: 1px solid var(--color-border);
 }
 .layout-demo :deep(.arco-layout-sider) .logo {
+    display: block;
     font-size: 1.6rem;
     font-weight: 200;
     text-align: center;
