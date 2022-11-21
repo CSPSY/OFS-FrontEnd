@@ -1,6 +1,6 @@
 <script setup>
 import { reactive } from 'vue';
-import { IconUser } from '@arco-design/web-vue/es/icon';
+import { IconUser, IconClose } from '@arco-design/web-vue/es/icon';
 import '@arco-design/web-vue/dist/arco.css';
 import PersonalCard from './user/Personoal-card.vue';
 import GoodsCard from './user/Goods-card.vue';
@@ -35,12 +35,13 @@ const setPersonal = () => {
     data.showCoverLayer = true;
 };
 
-// 显示商品详情卡片
+// 显示 / 消除商品详情卡片
 const showDescCard = (id) => {
-    data.showGoodsDesc = true;
-    data.showCoverLayer = true;
-    data.goodsItem = data.items[id - 1];
-    console.log(data.goodsItem)
+    data.showGoodsDesc = !data.showGoodsDesc;
+    data.showCoverLayer = !data.showCoverLayer;
+    if (id) {
+        data.goodsItem = data.items[id - 1];
+    }
 };
 
 </script>
@@ -164,7 +165,9 @@ const showDescCard = (id) => {
             <p class="title" style="font-size: 1.2rem;">OFS 在线食品购物</p>
         </footer>
     </div>
-    <div class="cover-layer" v-show="data.showCoverLayer"></div>
+    <div class="cover-layer" v-show="data.showCoverLayer">
+        <icon-close class="close-btn" size="34" @click="showDescCard(false)" />
+    </div>
 </template>
 
 <style scoped>
@@ -307,6 +310,12 @@ const showDescCard = (id) => {
     width: 100vw;
     height: 100vh;
     background: rgba(0, 0, 0, .6);
+}
+.close-btn {
+    cursor: pointer;
+    float: right;
+    color: rgba(254, 254, 255, .92);
+    margin: 4px 22px;
 }
 footer {
     display: flex;
