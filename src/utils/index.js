@@ -77,4 +77,46 @@ const itemsData = [
     }
 ];
 
-export { images, itemsData };
+const paymentData = [
+    {
+        key: '1',
+        name: '樱桃蛋糕',
+        imgAdr: '/src/assets/imgs/cake.jpg',
+        price: '35.7',
+        cnts: '1'
+    },
+    {
+        key: '2',
+        name: '桃子',
+        imgAdr: '/src/assets/imgs/peach.jpg',
+        price: '16.8',
+        cnts: '1'
+    },
+    {
+        key: '3',
+        name: '芝士披萨',
+        imgAdr: '/src/assets/imgs/pizza.jpg',
+        price: '42.6',
+        cnts: '1'
+    },
+    {
+        key: '4',
+        name: '墨西哥三明治',
+        imgAdr: '/src/assets/imgs/tabasco.jpg',
+        price: '9.6',
+        cnts: '2'
+    },
+    {
+        key: '5',
+        name: '车厘子',
+        imgAdr: '/src/assets/imgs/cherry.jpg',
+        price: '45.7',
+        cnts: '2'
+    }
+];
+
+const financialBin = (x) => {
+    return Number.parseFloat(x).toFixed(2);
+}
+
+export { images, itemsData, paymentData, financialBin };

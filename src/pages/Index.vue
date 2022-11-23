@@ -138,7 +138,7 @@ const showDescCard = (id) => {
                     <div class="item" v-for="item in data.items" :key="item.id">
                         <a-row style="display: flex;">
                             <a-col :span="4">
-                                <img :src="item.imgAdr" alt="the merchant images" style="width: 94%;" >
+                                <img :src="item.imgAdr" alt="the merchant images" style="width: 94%;" />
                             </a-col>
                             <a-col :span="10" style="border-left: 1px #9698a3 solid; height: 122px; padding: 6px 16px 12px;">
                                 <h3 style="margin-bottom: 12px;">{{item.name}}</h3>

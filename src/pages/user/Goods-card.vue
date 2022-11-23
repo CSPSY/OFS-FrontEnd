@@ -73,7 +73,7 @@ const purchaseGoods = () => {
             </div>
             <div class="item-button">
                 <button @click="addShoppingCart">加入购物车</button>
-                <button @click="purchaseGoods">立即购买</button>                
+                <button @click="purchaseGoods">立即购买</button>
             </div>
         </section>
     </div>
@@ -145,7 +145,7 @@ const purchaseGoods = () => {
     letter-spacing: .06rem;
 }
 .item-button button:hover {
-    background: rgba(51, 175, 241, 0.7);
+    background: rgba(82, 191, 249, 0.7);
 }
 .purchase-control {
     display: flex;

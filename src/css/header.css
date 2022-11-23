@@ -35,5 +35,5 @@
 }
 #header nav .right {
     display: flex;
-    /* margin-left: 660px; */
+    margin-left: auto;
 }
