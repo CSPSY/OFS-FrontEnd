@@ -10,4 +10,7 @@
     text-decoration: none;
     box-sizing: border-box;
 }
+a {
+    text-decoration: none;
+}
 </style>

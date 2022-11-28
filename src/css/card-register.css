@@ -1,0 +1,44 @@
+.register-btn {
+    border-radius: 5px;
+    font-size: 1.3rem;
+    border: 0;
+    outline: 0;
+    padding: 12px 156px;
+    color: whitesmoke;
+    background-color: rgb(1, 140, 207, .88);
+    letter-spacing: 0.6rem;
+    cursor: pointer;
+}
+.items-lr {
+    display: flex;
+    width: 512px;
+    margin-bottom: 32px;
+}
+.left, .right {
+    display: flex;
+}
+.left {
+    width: 58%;
+}
+.left input, .right input {
+    padding-bottom: 4px;
+    font-size: 1rem;
+}
+.left .input-icon {
+    width: 14%;
+}
+.right {
+    right: 30%;
+    margin-left: 30px;
+}
+.captcha-btn {
+    width: 50%;
+    border-radius: 5px;
+    margin-left: 12px;
+    border: 0;
+    outline: 0;
+    color: whitesmoke;
+    background-color: rgb(1, 140, 207, .88);
+    letter-spacing: 0.22em;
+    cursor: pointer;
+}
