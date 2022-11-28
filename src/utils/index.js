@@ -119,4 +119,6 @@ const financialBin = (x) => {
     return Number.parseFloat(x).toFixed(2);
 }
 
-export { images, itemsData, paymentData, financialBin };
+const payImg = "/public/pay.png";
+
+export { images, itemsData, paymentData, financialBin, payImg };

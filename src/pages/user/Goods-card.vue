@@ -2,7 +2,7 @@
 import { IconPlus, IconMinus } from '@arco-design/web-vue/es/icon';
 import { reactive } from 'vue';
 import { Message } from '@arco-design/web-vue';
-import { router } from '../../router/index.js'
+import { router } from '../../router/index.js';
 
 const data = reactive({
     purchaseCnts: 1

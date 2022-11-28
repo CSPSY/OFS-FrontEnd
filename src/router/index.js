@@ -36,9 +36,17 @@ const routes = [
     {
         path: '/user/payment',
         name: '支付',
-        component: () => import('../pages/user/payment.vue'),
+        component: () => import('../pages/user/Payment.vue'),
         meta: {
             title: '支付'
+        }
+    },
+    {
+        path: '/user/pay',
+        name: '付款',
+        component: () => import('../pages/user/Pay.vue'),
+        meta: {
+            title: '付款'
         }
     },
     {

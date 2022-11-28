@@ -23,8 +23,8 @@ const data = reactive({
 });
 
 // 导航栏搜索框是否展示，判断搜索框到顶部距离
-let showSearchFrame = () => {
-    let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+const showSearchFrame = () => {
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
     data.searchFrame = scrollTop > 160;
 }
 window.addEventListener("scroll", showSearchFrame);
@@ -35,13 +35,18 @@ const setPersonal = () => {
     data.showCoverLayer = true;
 };
 
-// 显示 / 消除商品详情卡片
+// 显示商品详情卡片
 const showDescCard = (id) => {
-    data.showGoodsDesc = !data.showGoodsDesc;
+    data.showGoodsDesc = true;
+    data.showCoverLayer = true;
+    data.goodsItem = data.items[id - 1];
+}
+
+// 消除卡片
+const disappearCard = () => {
+    data.showGoodsDesc = false;
+    data.showPersonal = false;
     data.showCoverLayer = !data.showCoverLayer;
-    if (id) {
-        data.goodsItem = data.items[id - 1];
-    }
 };
 
 </script>
@@ -53,13 +58,12 @@ const showDescCard = (id) => {
                 <a href="#" class="nav-title">O F S</a>
                 <div class="left">
                     <li class="nav-text" @click="setPersonal">个性化设置</li>
-                    <personal-card class="card-center" v-show="data.showPersonal"></personal-card>
                 </div>
                 <div style="width: 660px; display: flex;">
                     <a-input-search v-show="data.searchFrame" style="width: 640px; height: 34px; margin: 0 10px; align-self: center;" placeholder="输入想要的食品" />
                 </div>
                 <div class="right">
-                    <li class="nav-text">购物车</li>
+                    <router-link :to="{path: '/user/shopping-cart'}" class="nav-text">购物车</router-link>
                     <li class="nav-text">我的订单</li>
                     <li class="nav-text">联系客服</li>
                 </div>
@@ -154,7 +158,6 @@ const showDescCard = (id) => {
                             <a-col :span="4" class="item-control">
                                 <a-button shape="round" style="padding: 16px 0; border-radius: 6px;">加入购物车</a-button>
                                 <a-button shape="round" style="padding: 16px 0; border-radius: 6px;" @click="showDescCard(item.id)">查看商品</a-button>
-                                <goods-card class="card-center desc-card" :goods-desc="data.goodsItem" v-show="data.showGoodsDesc"></goods-card>
                             </a-col>
                         </a-row>
                     </div>
@@ -166,8 +169,10 @@ const showDescCard = (id) => {
         </footer>
     </div>
     <div class="cover-layer" v-show="data.showCoverLayer">
-        <icon-close class="close-btn" size="34" @click="showDescCard(false)" />
+        <icon-close class="close-btn" size="34" @click="disappearCard" />
     </div>
+    <personal-card class="card-center personal-card" v-show="data.showPersonal"></personal-card>
+    <goods-card class="card-center desc-card" :goods-desc="data.goodsItem" v-show="data.showGoodsDesc"></goods-card>
 </template>
 
 <style scoped>
@@ -296,8 +301,11 @@ const showDescCard = (id) => {
     left: 50%;
     transform: translate(-50%, 32%);
 }
-/* 商品详情卡片 */
-.desc-card {
+/* 
+    商品详情卡片
+    个性化设置卡片
+*/
+.desc-card, .personal-card {
     z-index: 131;
     transform: translate(-50%, -55%);
 }

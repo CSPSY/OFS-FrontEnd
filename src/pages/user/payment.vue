@@ -2,6 +2,7 @@
 import { reactive } from 'vue';
 import { paymentData, financialBin } from '../../utils/index.js';
 import { IconPlus, IconMinus } from '@arco-design/web-vue/es/icon';
+import { router } from '../../router/index.js';
 
 // 列名
 const columns = [
@@ -32,7 +33,7 @@ const columns = [
         dataIndex: 'total',
         slotName: 'total'
     },
-]
+];
 
 // 数据
 const data = reactive({
@@ -76,6 +77,10 @@ const computePayMoney = () => {
     total = financialBin(total);
     return total;
 };
+
+const payBtn = () => {
+    router.push({path: '/user/pay'});
+};
 </script>
 
 <template>
@@ -84,7 +89,7 @@ const computePayMoney = () => {
             <nav>
                 <router-link :to="{path: '/'}" class="nav-title">O F S</router-link>
                 <div class="right">
-                    <li class="nav-text">购物车</li>
+                    <router-link :to="{path: '/user/shopping-cart'}" class="nav-text">购物车</router-link>
                     <li class="nav-text">我的订单</li>
                     <li class="nav-text">联系客服</li>
                 </div>
@@ -120,7 +125,7 @@ const computePayMoney = () => {
                     <p class="title">支付总金额：</p>
                     <p class="text-money">{{data.totalPrice}}</p>
                     <p class="title" :style="{marginLeft: '0'}">元</p>
-                    <button :style="{width: '9%', marginLeft: '66px'}">付款</button>
+                    <button :style="{width: '9%', marginLeft: '66px'}" @click="payBtn">付款</button>
                 </div>
             </section>
         </section>
