@@ -1,8 +1,9 @@
 <script setup>
 import { reactive } from 'vue';
 import { paymentData, financialBin } from '../../utils/index.js';
-import { IconPlus, IconMinus } from '@arco-design/web-vue/es/icon';
+import { IconPlus, IconMinus, IconDown } from '@arco-design/web-vue/es/icon';
 import { router } from '../../router/index.js';
+import { address } from '../../utils/index.js'
 
 // 列名
 const columns = [
@@ -42,7 +43,8 @@ const data = reactive({
         cnts: [],
         total: [],
     },
-    totalPrice: 0
+    totalPrice: 0,
+    addr: ''
 });
 
 for (let i = 0; i < data.paymentData.length; i ++) {
@@ -76,6 +78,11 @@ const computePayMoney = () => {
     }
     total = financialBin(total);
     return total;
+};
+
+// 地址栏
+const changeAddr = (addr) => {
+    data.addr = addr;
 };
 
 const payBtn = () => {
@@ -122,6 +129,16 @@ const payBtn = () => {
                     </template>
                 </a-table>
                 <div class="item-button">
+                    <p class="title" :style="{marginLeft: '0'}">地址：</p>
+                    <a-dropdown-button>
+                        <a-input v-model="data.addr" :style="{width: '490px'}" type="text" placeholder="请填写地址" />
+                        <template #icon>
+                            <icon-down />
+                        </template>
+                        <template #content>
+                            <a-doption @click="changeAddr(addr)" v-for="addr in address">{{addr}}</a-doption>
+                        </template>
+                    </a-dropdown-button>
                     <p class="title">支付总金额：</p>
                     <p class="text-money">{{data.totalPrice}}</p>
                     <p class="title" :style="{marginLeft: '0'}">元</p>
@@ -141,6 +158,9 @@ const payBtn = () => {
 }
 :deep(.arco-table-th-title) {
     letter-spacing: 0.12rem;
+}
+:deep(.arco-btn-size-medium) {
+    padding: 0;
 }
 .content {
     display: flex;

@@ -115,10 +115,18 @@ const paymentData = [
     }
 ];
 
+// address
+const address = [
+    "广东省深圳市南山区南山街道翠庐",
+    "广东省深圳市南山区西丽街道留仙公馆",
+    "广东省深圳市龙岗区公园大地",
+    "广东省深圳市大鹏新区万科十七英里"
+]
+
 const financialBin = (x) => {
     return Number.parseFloat(x).toFixed(2);
 }
 
 const payImg = "/public/pay.png";
 
-export { images, itemsData, paymentData, financialBin, payImg };
+export { images, itemsData, paymentData, financialBin, payImg, address };
