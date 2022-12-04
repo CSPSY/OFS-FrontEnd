@@ -4,12 +4,13 @@ import { IconUser, IconClose } from '@arco-design/web-vue/es/icon';
 import '@arco-design/web-vue/dist/arco.css';
 import PersonalCard from './user/Personoal-card.vue';
 import GoodsCard from './user/Goods-card.vue';
-import { images, itemsData } from '../utils/index.js';
+import { judgeToken, getMerchantsItems, addItemsToShCart, sendLogout, searchMerchant } from '../api/index.js';
+import { router } from '../router';
 
 // data 数据
 const data = reactive({
-    items: itemsData,
-    images,
+    items: [],
+    images: [],
     // 导航栏搜索框显示
     searchFrame: false,
     // 个性化设置卡片显示
@@ -19,27 +20,63 @@ const data = reactive({
     // 子组件传值
     goodsItem: {},
     // 是否显示遮罩层
-    showCoverLayer: false
+    showCoverLayer: false,
+    // 登录 / 没登陆状态
+    loginStatus: false,
+    // 搜索商品名称
+    searchItemsName: '',
+    searchItemsName2: '',
+    username: localStorage.getItem('username')
 });
 
 // 导航栏搜索框是否展示，判断搜索框到顶部距离
 const showSearchFrame = () => {
     const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-    data.searchFrame = scrollTop > 160;
+    if (scrollTop > 160) {
+        data.searchFrame = true;
+    } else {
+        data.searchFrame = false;
+        data.searchItemsName = '';
+    }
 }
 window.addEventListener("scroll", showSearchFrame);
 
 // 展示个性化设置卡片
 const setPersonal = () => {
-    data.showPersonal = true;
-    data.showCoverLayer = true;
+    if (data.loginStatus) {
+        data.showPersonal = true;
+        data.showCoverLayer = true;
+    } else {
+        Message.info("请先登录!");
+        return false;
+    }
 };
 
+// 判断是否登录
+const judgeIfLogin = () => {
+    if (localStorage.getItem('token') === null) {
+        data.loginStatus = false;
+        return;
+    }
+    const postObj = { token: localStorage.getItem('token') };
+    judgeToken(postObj).then(res => {
+        if (res.data.code === 200) {
+            data.loginStatus = true;
+        } else {
+            data.loginStatus = false;
+            localStorage.clear();
+        }
+    }).catch(err => {
+        console.log(err);
+    });
+}
+judgeIfLogin();
+
 // 显示商品详情卡片
-const showDescCard = (id) => {
+const showDescCard = (idx) => {
     data.showGoodsDesc = true;
     data.showCoverLayer = true;
-    data.goodsItem = data.items[id - 1];
+    data.goodsItem = data.items[idx];
 }
 
 // 消除卡片
@@ -49,6 +86,85 @@ const disappearCard = () => {
     data.showCoverLayer = !data.showCoverLayer;
 };
 
+// 获取首页商品数据
+const getItemsData = () => {
+    getMerchantsItems().then(res => {
+        let items = res.data.value;
+        for (let i = 0; i < items.length; i ++) {
+            items[i].idx = i;
+            items[i].imgUrl = 'http://47.94.161.52/img/' + items[i].imgUrl;
+            if (i < 8) {
+                data.images[i] = items[i].imgUrl;
+            }
+            items[i].descr = items[i].descr.replaceAll('\\n', '\n');
+        }
+        data.items = res.data.value;
+    }).catch(err => {
+        console.log(err);
+    });
+};
+
+getItemsData();
+
+// 加入购物车
+const addItemsToCart = (id) => {
+    const postObj = {
+        pid : id
+    }
+    addItemsToShCart(postObj).then(res => {
+        if (res.data.code === 200) {
+            Message.info('加入购物车成功');
+        }
+    }).catch(err => {
+        console.log(err);
+    });
+};
+
+// 去购物车
+const toShCart = () => {
+    if (data.loginStatus) {
+        router.push('/user/shopping-cart');
+    } else {
+        Message.info("请先登录!");
+        return false;
+    }
+};
+
+// 搜索商品
+const searchGoods = () => {
+    let goodsSearch = data.searchItemsName || data.searchItemsName2;
+    if (goodsSearch === "") {
+        return;
+    }
+    console.log(goodsSearch);
+    searchMerchant(goodsSearch).then(res => {
+        if (res.data.code === 200 && res.data.value.length) {
+            let items = res.data.value;
+            for (let i = 0; i < items.length; i ++) {
+                items[i].idx = i;
+                items[i].imgUrl = 'http://47.94.161.52/img/' + items[i].imgUrl;
+                items[i].descr = items[i].descr.replace('\n', '<br>');
+            }
+            data.items = res.data.value;
+        } else {
+            Message.info('没找到相关商品');
+            getItemsData();
+        }
+    }).catch(err => {
+        console.log(err);
+    });
+};
+
+// 退出登录
+const handleLogout = () => {
+    sendLogout().then(res => {
+        Message.info('退出登录成功');
+        localStorage.clear();
+        location.reload();
+    }).catch(err => {
+        console.log(err);
+    })
+};
 </script>
 
 <template>
@@ -60,10 +176,16 @@ const disappearCard = () => {
                     <li class="nav-text" @click="setPersonal">个性化设置</li>
                 </div>
                 <div style="width: 660px; display: flex;">
-                    <a-input-search v-show="data.searchFrame" style="width: 640px; height: 34px; margin: 0 10px; align-self: center;" placeholder="输入想要的食品" />
+                    <a-input-search
+                        v-show="data.searchFrame"
+                        v-model.trim="data.searchItemsName"
+                        style="width: 640px; height: 34px; margin: 0 10px; align-self: center;"
+                        placeholder="输入想要的食品"
+                        @search="searchGoods"
+                    />
                 </div>
                 <div class="right">
-                    <router-link :to="{path: '/user/shopping-cart'}" class="nav-text">购物车</router-link>
+                    <li @click="toShCart" class="nav-text">购物车</li>
                     <li class="nav-text">我的订单</li>
                     <li class="nav-text">联系客服</li>
                 </div>
@@ -73,7 +195,11 @@ const disappearCard = () => {
             <section class="main">
                 <div class="search-bar">
                     <h2 class="title">O F S</h2>
-                    <a-input-search class="search-merchant" placeholder="输入想要的食品" />
+                    <a-input-search
+                        v-model.trim="data.searchItemsName2"
+                        class="search-merchant" placeholder="输入想要的食品" 
+                        @search="searchGoods"
+                    />
                 </div>
                 <div class="list-bar">
                     <div class="classify">
@@ -115,7 +241,7 @@ const disappearCard = () => {
                             indicator-type="dot"
                             show-arrow="hover"
                         >
-                            <a-carousel-item v-for="image in images">
+                            <a-carousel-item v-for="image in data.images">
                             <img
                                 :src="image"
                                 :style="{
@@ -129,35 +255,44 @@ const disappearCard = () => {
                     <div class="personal-info">
                         <div class="member-bd">
                             <icon-user :style="{fontSize:'82px', color: '#666666', margin: '0 auto 6px'}" />
-                            <p :style="{fontSize: '1.2rem', letterSpacing: '0.12rem', textAlign: 'center'}">Hi! 你好</p>
+                            <span
+                                :style="{fontSize: '1.2rem', letterSpacing: '0.12rem', textAlign: 'center', lineHeight: '1.6rem'}"
+                            >Hi! 你好</span>
+                            <span
+                                :style="{fontSize: '1.2rem', letterSpacing: '0.12rem', textAlign: 'center', lineHeight: '1.6rem'}"
+                                v-show="data.loginStatus"
+                            >用户 {{data.username}}</span>
                         </div>
-                        <div class="button-items">
+                        <div v-show="!data.loginStatus" class="button-items">
                             <a-button shape="round" href="/login-user">登录</a-button>
                             <a-button shape="round" href="/register-user">注册</a-button>
                             <a-button shape="round" href="/login-merchant">店铺</a-button>
-                        </div>  
+                        </div>
+                        <div v-show="data.loginStatus" class="button-items">
+                            <a-button shape="round" @click="handleLogout">退出登录</a-button>
+                        </div>
                     </div>
                 </div>
                 <div class="list-items">
                     <div class="item" v-for="item in data.items" :key="item.id">
                         <a-row style="display: flex;">
                             <a-col :span="4">
-                                <img :src="item.imgAdr" alt="the merchant images" style="width: 94%;" />
+                                <img :src="item.imgUrl" alt="the merchant images" style="width: 94%;" />
                             </a-col>
                             <a-col :span="10" style="border-left: 1px #9698a3 solid; height: 122px; padding: 6px 16px 12px;">
                                 <h3 style="margin-bottom: 12px;">{{item.name}}</h3>
-                                <p style="white-space: pre-wrap; line-height: 1.6rem;">{{item.desc}}</p>
+                                <p style="white-space: pre-wrap; line-height: 1.6rem;">{{item.descr}}</p>
                             </a-col>
                             <a-col style="display: flex; justify-content: center; align-items: center; height: 122px;" :span="6">
-                                <p class="price-text">￥{{item.price}}</p>
-                                <p class="price-text" v-show="item.memberPrice !== '0'" style="color: #fc5531; border-left: 1.2px #9698a3 solid;">
-                                    ￥{{item.memberPrice}}
+                                <p class="price-text">￥{{item.normalprice}}</p>
+                                <p class="price-text" v-show="item.memberprice !== '0'" style="color: #fc5531; border-left: 1.2px #9698a3 solid;">
+                                    ￥{{item.memberprice}}
                                     <div style="font-size: .87rem; text-align: center; letter-spacing: .16rem; margin-top: 4px;">会员价</div>
                                 </p>
                             </a-col>
                             <a-col :span="4" class="item-control">
-                                <a-button shape="round" style="padding: 16px 0; border-radius: 6px;">加入购物车</a-button>
-                                <a-button shape="round" style="padding: 16px 0; border-radius: 6px;" @click="showDescCard(item.id)">查看商品</a-button>
+                                <a-button shape="round" style="padding: 16px 0; border-radius: 6px;" @click="addItemsToCart(item.id)">加入购物车</a-button>
+                                <a-button shape="round" style="padding: 16px 0; border-radius: 6px;" @click="showDescCard(item.idx)">查看商品</a-button>
                             </a-col>
                         </a-row>
                     </div>

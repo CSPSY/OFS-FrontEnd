@@ -1,7 +1,8 @@
 <script setup>
-import { defineComponent, reactive } from 'vue';
+import { reactive } from 'vue';
 import { Message } from '@arco-design/web-vue';
 import { IconCaretLeft, IconGift, IconCalendar, IconMenuUnfold, IconDashboard } from '@arco-design/web-vue/es/icon';
+import GoodsChange from './components/Goods-change.vue';
 
 // data 数据
 const data = reactive({
@@ -53,7 +54,7 @@ const onClickMenuItem = (key) => {
                     <a-menu-item key="2_2">订单撤销</a-menu-item>
                     <!-- <a-menu-item key="2_3">订单增加</a-menu-item> -->
                 </a-sub-menu>   
-                <a-menu-item key="3">
+                <a-menu-item key="3" disabled>
                     <icon-dashboard />
                     数据统计
                 </a-menu-item>
@@ -74,7 +75,10 @@ const onClickMenuItem = (key) => {
                     <a-breadcrumb-item v-if="data.navText.first">{{data.navText.first}}</a-breadcrumb-item>
                     <a-breadcrumb-item v-if="data.navText.second">{{data.navText.second}}</a-breadcrumb-item>
                 </a-breadcrumb>
-                <a-layout-content>Content</a-layout-content>
+                <!-- 主内容区 -->
+                <a-layout-content>
+                    <GoodsChange></GoodsChange>
+                </a-layout-content>
                 <a-layout-footer style="letter-spacing: .06rem;">O F S 商家管理平台</a-layout-footer>
             </a-layout>
         </a-layout>
@@ -129,4 +133,5 @@ const onClickMenuItem = (key) => {
     font-stretch: condensed;
     text-align: center;
 }
+
 </style>

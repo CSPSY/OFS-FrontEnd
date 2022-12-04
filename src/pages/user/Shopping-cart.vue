@@ -1,16 +1,18 @@
 <script setup>
 import { reactive } from 'vue';
-import { paymentData, financialBin } from '../../utils/index.js';
+import { financialBin } from '../../utils/index.js';
 import { IconPlus, IconMinus } from '@arco-design/web-vue/es/icon';
 import { router } from '../../router/index.js';
+import { getShoppingCart, addSalesOrder } from '../../api/index.js';
+import { Message } from '@arco-design/web-vue';
 
 // 列名
 const columns = [
     {
         width: '120',
         title: '商品图片',
-        dataIndex: 'imgAdr',
-        slotName: 'imgAdr',
+        dataIndex: 'imgUrl',
+        slotName: 'imgUrl',
     },
     {
         title: '商品名称',
@@ -19,7 +21,7 @@ const columns = [
     {
         width: '220',
         title: '商品单价/元',
-        dataIndex: 'price',
+        dataIndex: 'normalprice',
     },
     {
         width: '220',
@@ -37,17 +39,28 @@ const columns = [
 
 // 数据
 const data = reactive({
-    paymentData,
+    paymentData: [],
     items: {
         cnts: [],
         total: [],
+        selected: []
     },
     totalPrice: 0
 });
 
-for (let i = 0; i < data.paymentData.length; i ++) {
-    data.items.cnts[i] = parseInt(data.paymentData[i].cnts);
+// 获取购物车数据
+const getCartItems = () => {
+    getShoppingCart().then(res => {
+        data.paymentData = res.data.value.slice(4);
+        for (let i = 0; i < data.paymentData.length; i ++) {
+            data.items.cnts[i] = parseInt(data.paymentData[i].nums);
+            data.paymentData[i].key = i + 1;
+        }
+    }).catch(err => {
+        console.log(err);
+    })
 }
+getCartItems();
 
 // 数字输入框
 const handleMinus = (idx) => {
@@ -62,7 +75,7 @@ const handlePlus = (idx) => {
 
 // 计算单个商品总价
 const computeTotal = (idx) => {
-    let total = financialBin(data.items.cnts[idx] * parseFloat(data.paymentData[idx].price));
+    let total = financialBin(data.items.cnts[idx] * parseFloat(data.paymentData[idx].normalprice));
     data.items.total[idx] = total;
     computeSelectedGoods();
     return total;
@@ -86,6 +99,13 @@ const rowSelection = ({
 });
 
 const paymentBtn = () => {
+    if (data.items.selected.length === 0) {
+        Message.info('请选择商品！');
+        return;
+    }
+    addSalesOrder().then(res => {
+
+    });
     router.push({path: '/user/payment'});
 };
 
@@ -133,8 +153,8 @@ const computeSelectedGoods = () => {
                     :data="data.paymentData"
                     :row-selection="rowSelection"
                 >
-                    <template #imgAdr="{ rowIndex }">
-                        <img :src="data.paymentData[rowIndex].imgAdr" alt="the merchant images" :style="{height: '50px', width: '70px'}" />
+                    <template #imgUrl="{ rowIndex }">
+                        <img :src="'http://47.94.161.52/img/'+data.paymentData[rowIndex].imgUrl" alt="the merchant images" :style="{height: '50px', width: '70px'}" />
                     </template>
                     <template #cnts="{ rowIndex }">
                         <div :style="{display: 'flex', paddingRight: '32px'}">

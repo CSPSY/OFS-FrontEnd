@@ -1,9 +1,9 @@
 <script setup>
 import { reactive } from 'vue';
 import { paymentData, financialBin } from '../../utils/index.js';
-import { IconPlus, IconMinus, IconDown } from '@arco-design/web-vue/es/icon';
+import { IconDown } from '@arco-design/web-vue/es/icon';
 import { router } from '../../router/index.js';
-import { address } from '../../utils/index.js'
+import { address } from '../../utils/index.js';
 
 // 列名
 const columns = [
@@ -51,17 +51,6 @@ for (let i = 0; i < data.paymentData.length; i ++) {
     data.items.cnts[i] = parseInt(data.paymentData[i].cnts);
 }
 
-// 数字输入框
-const handleMinus = (idx) => {
-    if (data.items.cnts[idx] > 0) {
-        data.items.cnts[idx] --;
-    }
-};
-
-const handlePlus = (idx) => {
-    data.items.cnts[idx] ++;
-};
-
 // 计算单个商品总价
 const computeTotal = (idx) => {
     let total = financialBin(data.items.cnts[idx] * parseFloat(data.paymentData[idx].price));
@@ -71,7 +60,7 @@ const computeTotal = (idx) => {
 };
 
 // 计算商品支付总金额
-const computePayMoney = () => {
+const computePayMoney = () => { 
     let total = 0;
     for (let i = 0; i < data.items.cnts.length; i ++) {
         total += parseFloat(data.items.total[i]);
@@ -112,17 +101,6 @@ const payBtn = () => {
                 >
                     <template #imgAdr="{ rowIndex }">
                         <img :src="data.paymentData[rowIndex].imgAdr" alt="the merchant images" :style="{height: '50px', width: '70px'}" />
-                    </template>
-                    <template #cnts="{ rowIndex }">
-                        <div :style="{display: 'flex', paddingRight: '32px'}">
-                            <span class="btn-control" @click="handleMinus(rowIndex)">
-                                <IconMinus />
-                            </span>
-                            <a-input-number v-model.number="data.items.cnts[rowIndex]" hide-button :min="0" :precision="0" />
-                            <span class="btn-control" @click="handlePlus(rowIndex)">
-                                <IconPlus />
-                            </span>
-                        </div>
                     </template>
                     <template #total="{ rowIndex }">
                         {{computeTotal(rowIndex)}}

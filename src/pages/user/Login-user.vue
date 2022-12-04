@@ -1,6 +1,5 @@
 <script setup>
 import { IconUser, IconLock } from '@arco-design/web-vue/es/icon';
-import { Message } from '@arco-design/web-vue';
 import { reactive, watch } from 'vue';
 import { sendLoginInfo } from '../../api/index.js';
 import { router } from '../../router/index.js';
@@ -14,11 +13,10 @@ const data = reactive({
 
 function handleLogin() {
     let { username, password } = data.loginInfo;
-    // console.log(username, password)
     if (username === "") {
-        Message.info("请填写用户名！");
+        Message.info("请填写用户名!");
     } else if (password === "") {
-        Message.info("请填写密码！");
+        Message.info("请填写密码!");
     } else {
         const postObj = {
             username,
@@ -26,11 +24,13 @@ function handleLogin() {
         }
         sendLoginInfo(postObj).then(res => {
             if (res.data.code === 200) {
+                localStorage.setItem('token', res.data.value.access_token);
+                localStorage.setItem('username', username);
                 Message.info("登陆成功！");
                 router.push({path: '/'})
             }
             }).catch(err => {
-                Message.info(err.msg);
+                console.log(err);
         });
     }
 }

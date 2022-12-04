@@ -41,14 +41,14 @@ const purchaseGoods = () => {
 <template>
     <div class="desc-card">
         <section :style="{height: '300px', overflow: 'hidden', marginBottom: '5px'}">
-            <img 
+            <img
                 :style="{width: '100%', height: '100%', overflow: 'hidden', borderRadius: '5px 5px 0 0'}"
-                :src="goodsDesc.imgAdr" :alt="goodsDesc.name"
+                :src="goodsDesc.imgUrl" :alt="goodsDesc.name"
             />
         </section>
         <section :style="{height:'230px'}" class="item item-text">
             <h3 class="title">{{goodsDesc.name}}</h3>
-            <p class="text">{{goodsDesc.desc}}</p>
+            <p class="text">{{goodsDesc.descr}}</p>
         </section>
         <section class="item-control">
             <div :style="{width: '33%', display: 'flex', alignItems: 'center'}">
