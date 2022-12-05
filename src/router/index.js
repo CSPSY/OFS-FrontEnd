@@ -68,7 +68,7 @@ const routes = [
     {
         path: '/merchant/management',
         name: '商品管理',
-        component: () => import('../pages/merchant/index.vue'),
+        component: () => import('../pages/merchant/Index.vue'),
         meta: {
             title: '商品管理'
         }
@@ -92,7 +92,7 @@ const routes = [
     {
         path: '/admin/management',
         name: '后台管理系统',
-        component: () => import('../pages/admin/index.vue'),
+        component: () => import('../pages/admin/Index.vue'),
         meta: {
             title: '后台管理系统'
         }

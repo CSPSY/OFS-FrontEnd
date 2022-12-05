@@ -3,6 +3,7 @@ import { IconPlus, IconMinus } from '@arco-design/web-vue/es/icon';
 import { reactive } from 'vue';
 import { Message } from '@arco-design/web-vue';
 import { router } from '../../router/index.js';
+import { addItemsToShCart } from '../../api';
 
 const data = reactive({
     purchaseCnts: 1
@@ -12,6 +13,10 @@ const data = reactive({
 const props = defineProps({
     goodsDesc   : {
         type: Object,
+        required: true,
+    },
+    loginStatus : {
+        type: Boolean,
         required: true,
     }
 });
@@ -29,11 +34,28 @@ const handlePlus = () => {
 
 // 加入购物车
 const addShoppingCart = () => {
-    Message.info("加入购物车成功！");
+    if (!props.loginStatus) {
+        Message.info("请先登录！");
+        return;
+    }
+    const postObj = {
+        pid : props.goodsDesc.id
+    }
+    addItemsToShCart(postObj).then(res => {
+        if (res.data.code === 200) {
+            Message.info('加入购物车成功');
+        }
+    }).catch(err => {
+        console.log(err);
+    });
 };
 
 // 立即购买
 const purchaseGoods = () => {
+    if (!props.loginStatus) {
+        Message.info("请先登录！");
+        return;
+    }
     router.push({path: '/user/payment'});
 };
 </script>
@@ -41,21 +63,21 @@ const purchaseGoods = () => {
 <template>
     <div class="desc-card">
         <section :style="{height: '300px', overflow: 'hidden', marginBottom: '5px'}">
-            <img 
+            <img
                 :style="{width: '100%', height: '100%', overflow: 'hidden', borderRadius: '5px 5px 0 0'}"
-                :src="goodsDesc.imgAdr" :alt="goodsDesc.name"
+                :src="goodsDesc.imgUrl" :alt="goodsDesc.name"
             />
         </section>
         <section :style="{height:'230px'}" class="item item-text">
             <h3 class="title">{{goodsDesc.name}}</h3>
-            <p class="text">{{goodsDesc.desc}}</p>
+            <p class="text">{{goodsDesc.descr}}</p>
         </section>
         <section class="item-control">
             <div :style="{width: '33%', display: 'flex', alignItems: 'center'}">
                 <p :style="{lineHeight: '1.55rem', fontSize: '1rem'}">单价</p>
-                <p class="price-text">￥{{goodsDesc.price}}</p>
-                <p class="price-text" v-show="goodsDesc.memberPrice !== '0'" style="color: #fc5531; border-left: 1.2px #9698a3 solid;">
-                    ￥{{goodsDesc.memberPrice}}
+                <p class="price-text">￥{{goodsDesc.normalprice}}</p>
+                <p class="price-text" v-show="goodsDesc.memberprice !== '0'" style="color: #fc5531; border-left: 1.2px #9698a3 solid;">
+                    ￥{{goodsDesc.memberprice}}
                     <div style="font-size: .87rem; text-align: center; letter-spacing: .16rem; margin-top: 4px;">会员价</div>
                 </p>
             </div>

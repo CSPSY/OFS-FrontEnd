@@ -1,16 +1,18 @@
 <script setup>
 import { reactive } from 'vue';
-import { paymentData, financialBin } from '../../utils/index.js';
-import { IconPlus, IconMinus } from '@arco-design/web-vue/es/icon';
+import { financialBin, getPayDatas, getOrderId } from '../../utils/index.js';
+import { IconDown } from '@arco-design/web-vue/es/icon';
 import { router } from '../../router/index.js';
+import { getOrderAddr } from '../../api/index.js';
+import { Message } from '@arco-design/web-vue';
 
 // 列名
 const columns = [
     {
         width: '120',
         title: '商品图片',
-        dataIndex: 'imgAdr',
-        slotName: 'imgAdr',
+        dataIndex: 'imgUrl',
+        slotName: 'imgUrl',
     },
     {
         title: '商品名称',
@@ -19,7 +21,7 @@ const columns = [
     {
         width: '220',
         title: '商品单价/元',
-        dataIndex: 'price',
+        dataIndex: 'normalprice',
     },
     {
         width: '220',
@@ -37,48 +39,57 @@ const columns = [
 
 // 数据
 const data = reactive({
-    paymentData,
+    orderId: getOrderId(),
+    paymentData: getPayDatas(),
     items: {
         cnts: [],
         total: [],
     },
-    totalPrice: 0
+    totalPrice: 0,
+    addrOpt: [],
+    addr: '',
+});
+
+getOrderAddr().then(res => {
+    if (res.data.code === 200) {
+        console.log(res);
+        data.addrOpt = res.data.value;
+    }
+}).catch(err => {
+    console.log(err);
 });
 
 for (let i = 0; i < data.paymentData.length; i ++) {
     data.items.cnts[i] = parseInt(data.paymentData[i].cnts);
 }
 
-// 数字输入框
-const handleMinus = (idx) => {
-    if (data.items.cnts[idx] > 0) {
-        data.items.cnts[idx] --;
-    }
-};
-
-const handlePlus = (idx) => {
-    data.items.cnts[idx] ++;
-};
-
 // 计算单个商品总价
 const computeTotal = (idx) => {
-    let total = financialBin(data.items.cnts[idx] * parseFloat(data.paymentData[idx].price));
-    data.items.total[idx] = total;
-    data.totalPrice = computePayMoney();
+    let total = parseFloat(data.paymentData[idx].total);
     return total;
 };
 
 // 计算商品支付总金额
-const computePayMoney = () => {
+const computePayMoney = () => { 
     let total = 0;
-    for (let i = 0; i < data.items.cnts.length; i ++) {
-        total += parseFloat(data.items.total[i]);
+    for (let i = 0; i < data.paymentData.length; i ++) {
+        total += parseFloat(data.paymentData[i].total);
     }
     total = financialBin(total);
     return total;
 };
 
+// 地址栏
+const changeAddr = (addr) => {
+    data.addr = addr;
+};
+
 const payBtn = () => {
+    if (data.addr === '') {
+        Message.info('请填写收货地址！');
+        return;
+    }
+    localStorage.setItem('addr', data.addr);
     router.push({path: '/user/pay'});
 };
 </script>
@@ -103,27 +114,26 @@ const payBtn = () => {
                     column-resizable
                     :data="data.paymentData"
                 >
-                    <template #imgAdr="{ rowIndex }">
-                        <img :src="data.paymentData[rowIndex].imgAdr" alt="the merchant images" :style="{height: '50px', width: '70px'}" />
-                    </template>
-                    <template #cnts="{ rowIndex }">
-                        <div :style="{display: 'flex', paddingRight: '32px'}">
-                            <span class="btn-control" @click="handleMinus(rowIndex)">
-                                <IconMinus />
-                            </span>
-                            <a-input-number v-model.number="data.items.cnts[rowIndex]" hide-button :min="0" :precision="0" />
-                            <span class="btn-control" @click="handlePlus(rowIndex)">
-                                <IconPlus />
-                            </span>
-                        </div>
+                    <template #imgUrl="{ rowIndex }">
+                        <img :src="'http://47.94.161.52/img/'+data.paymentData[rowIndex].imgUrl" alt="the merchant images" :style="{height: '50px', width: '70px'}" />
                     </template>
                     <template #total="{ rowIndex }">
                         {{computeTotal(rowIndex)}}
                     </template>
                 </a-table>
                 <div class="item-button">
+                    <p class="title" :style="{marginLeft: '0'}">地址：</p>
+                    <a-dropdown-button>
+                        <a-input v-model.trim="data.addr" :style="{width: '490px'}" type="text" placeholder="请填写地址" />
+                        <template #icon>
+                            <icon-down />
+                        </template>
+                        <template #content>
+                            <a-doption @click="changeAddr(addr)" v-for="addr in data.addrOpt">{{addr}}</a-doption>
+                        </template>
+                    </a-dropdown-button>
                     <p class="title">支付总金额：</p>
-                    <p class="text-money">{{data.totalPrice}}</p>
+                    <p class="text-money">{{computePayMoney()}}</p>
                     <p class="title" :style="{marginLeft: '0'}">元</p>
                     <button :style="{width: '9%', marginLeft: '66px'}" @click="payBtn">付款</button>
                 </div>
@@ -141,6 +151,9 @@ const payBtn = () => {
 }
 :deep(.arco-table-th-title) {
     letter-spacing: 0.12rem;
+}
+:deep(.arco-btn-size-medium) {
+    padding: 0;
 }
 .content {
     display: flex;

@@ -4,6 +4,7 @@ import Components from 'unplugin-vue-components/vite'
 import {ArcoResolver} from 'unplugin-vue-components/resolvers'
 
 export default defineConfig({
+    hmr: true,
     plugins: [
         vue(),
             Components({
@@ -16,5 +17,8 @@ export default defineConfig({
         open: true,
         port: 8080,
         inline: true,
+    },
+    build: {
+        outDir: 'ofs'
     }
 })

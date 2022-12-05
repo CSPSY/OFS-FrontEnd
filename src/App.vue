@@ -1,3 +1,7 @@
+<script setup>
+import '@arco-design/web-vue/dist/arco.css';
+</script>
+
 <template>
     <router-view></router-view>
 </template>

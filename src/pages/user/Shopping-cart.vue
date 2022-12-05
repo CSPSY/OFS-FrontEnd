@@ -1,16 +1,18 @@
 <script setup>
 import { reactive } from 'vue';
-import { paymentData, financialBin } from '../../utils/index.js';
+import { financialBin, setOrderId, setPayDatas } from '../../utils/index.js';
 import { IconPlus, IconMinus } from '@arco-design/web-vue/es/icon';
 import { router } from '../../router/index.js';
+import { getShoppingCart, addSalesOrder } from '../../api/index.js';
+import { Message } from '@arco-design/web-vue';
 
 // 列名
 const columns = [
     {
         width: '120',
         title: '商品图片',
-        dataIndex: 'imgAdr',
-        slotName: 'imgAdr',
+        dataIndex: 'imgUrl',
+        slotName: 'imgUrl',
     },
     {
         title: '商品名称',
@@ -19,7 +21,7 @@ const columns = [
     {
         width: '220',
         title: '商品单价/元',
-        dataIndex: 'price',
+        dataIndex: 'normalprice',
     },
     {
         width: '220',
@@ -37,17 +39,30 @@ const columns = [
 
 // 数据
 const data = reactive({
-    paymentData,
+    paymentData: [],
     items: {
         cnts: [],
         total: [],
+        selected: [],
+        sum: []
     },
     totalPrice: 0
 });
 
-for (let i = 0; i < data.paymentData.length; i ++) {
-    data.items.cnts[i] = parseInt(data.paymentData[i].cnts);
-}
+// 获取购物车数据
+const getCartItems = () => {
+    getShoppingCart().then(res => {
+        data.paymentData = res.data.value;
+        for (let i = 0; i < data.paymentData.length; i ++) {
+            data.items.sum[i] = parseInt(data.paymentData[i].sum);
+            data.items.cnts[i] = parseInt(data.paymentData[i].nums);
+            data.paymentData[i].key = i + 1;
+        }
+    }).catch(err => {
+        console.log(err);
+    })
+};
+getCartItems();
 
 // 数字输入框
 const handleMinus = (idx) => {
@@ -57,12 +72,16 @@ const handleMinus = (idx) => {
 };
 
 const handlePlus = (idx) => {
-    data.items.cnts[idx] ++;
+    if (data.items.cnts[idx] < data.items.sum[idx]) {
+        data.items.cnts[idx] ++;
+    } else {
+        Message.info('商品库存不足！');
+    }
 };
 
 // 计算单个商品总价
 const computeTotal = (idx) => {
-    let total = financialBin(data.items.cnts[idx] * parseFloat(data.paymentData[idx].price));
+    let total = financialBin(data.items.cnts[idx] * parseFloat(data.paymentData[idx].normalprice));
     data.items.total[idx] = total;
     computeSelectedGoods();
     return total;
@@ -86,11 +105,39 @@ const rowSelection = ({
 });
 
 const paymentBtn = () => {
-    router.push({path: '/user/payment'});
+    const items = data.items.selected;
+    if (items.length === 0) {
+        Message.info('请选择商品！');
+        return;
+    }
+    const payObj = [];
+    const postObj = {
+        data: []
+    }
+    for (let i = 0; i < items.length; i ++) {
+        const tmp = {
+            productId: data.paymentData[items[i]].id,
+            nums: data.items.cnts[i]
+        }
+        data.paymentData[items[i]].total = data.items.total[items[i]];
+        data.paymentData[items[i]].cnts = data.items.cnts[items[i]];
+        postObj.data.push(tmp);
+        payObj.push(data.paymentData[items[i]]);
+    }
+    addSalesOrder(postObj).then(res => {
+        if (res.data.code === 200) {
+            setPayDatas(payObj);
+            setOrderId(res.data.value);
+            router.push({path: '/user/payment'});
+        }
+    }).catch(err => {
+        console.log(err);
+    });
 };
 
 // 计算所选商品总价
 const computeSelectedGoods = () => {
+    const items = [];
     const goods = document.querySelectorAll('input');
     let idx = -2, total = 0;
     for (let i = 0; i < goods.length; i ++) {
@@ -98,14 +145,19 @@ const computeSelectedGoods = () => {
             idx ++;
             if (goods[i].checked) {
                 if (idx === -1) {
+                    for (let j = 0; j < (goods.length - 1) / 2; j ++) {
+                        items.push(j);
+                    }
                     total = computePayMoney();
                     break;
                 } else {
                     total += parseFloat(data.items.total[idx]);
+                    items.push(idx);
                 }
             }
         }
     }
+    data.items.selected = items;
     data.totalPrice = financialBin(total);
 }
 
@@ -133,15 +185,15 @@ const computeSelectedGoods = () => {
                     :data="data.paymentData"
                     :row-selection="rowSelection"
                 >
-                    <template #imgAdr="{ rowIndex }">
-                        <img :src="data.paymentData[rowIndex].imgAdr" alt="the merchant images" :style="{height: '50px', width: '70px'}" />
+                    <template #imgUrl="{ rowIndex }">
+                        <img :src="'http://47.94.161.52/img/'+data.paymentData[rowIndex].imgUrl" alt="the merchant images" :style="{height: '50px', width: '70px'}" />
                     </template>
                     <template #cnts="{ rowIndex }">
                         <div :style="{display: 'flex', paddingRight: '32px'}">
                             <span class="btn-control" @click="handleMinus(rowIndex)">
                                 <IconMinus />
                             </span>
-                            <a-input-number v-model.number="data.items.cnts[rowIndex]" hide-button :min="0" :precision="0" />
+                            <a-input-number v-model.number="data.items.cnts[rowIndex]" hide-button :min="0" :max="data.items.sum[rowIndex]" :precision="0" />
                             <span class="btn-control" @click="handlePlus(rowIndex)">
                                 <IconPlus />
                             </span>

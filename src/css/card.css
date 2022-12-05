@@ -38,6 +38,7 @@
 .input-icon {
     align-self: flex-end;
     width: 7%;
+    font-size: 3rem;
     padding-left: 6px;
     padding-bottom: 6px;
     border-bottom:1px solid whitesmoke;
