@@ -52,7 +52,7 @@ const data = reactive({
 // 获取购物车数据
 const getCartItems = () => {
     getShoppingCart().then(res => {
-        data.paymentData = res.data.value.slice(4);
+        data.paymentData = res.data.value;
         for (let i = 0; i < data.paymentData.length; i ++) {
             data.items.sum[i] = parseInt(data.paymentData[i].sum);
             data.items.cnts[i] = parseInt(data.paymentData[i].nums);

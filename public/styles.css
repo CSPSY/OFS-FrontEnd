@@ -1,0 +1,22 @@
+body {
+	margin: 0;
+	color: #444;
+	background: #f6f6f6;
+}
+
+#world {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	background: linear-gradient(#4494e4, #bed9f1);
+}
+
+#Survival{
+	position: absolute;
+	left: 45%;
+	top: 7%;
+	font-size: xx-large;
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+	color: #bed9f1;
+}

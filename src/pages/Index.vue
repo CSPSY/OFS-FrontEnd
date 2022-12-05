@@ -56,7 +56,7 @@ const setPersonal = () => {
 
 // 判断是否登录
 const judgeIfLogin = () => {
-    if (localStorage.getItem('token') === null) {
+    if (localStorage.getItem('token') === null || localStorage.getItem('username') === null) {
         data.loginStatus = false;
         return;
     }
@@ -70,6 +70,7 @@ const judgeIfLogin = () => {
         }
     }).catch(err => {
         console.log(err);
+        localStorage.clear();
     });
 }
 judgeIfLogin();
@@ -312,6 +313,16 @@ const handleLogout = () => {
     </div>
     <personal-card class="card-center personal-card" v-show="data.showPersonal"></personal-card>
     <goods-card class="card-center desc-card" :goods-desc="data.goodsItem" :login-status="data.loginStatus" v-show="data.showGoodsDesc"></goods-card>
+    <div class="plane-game">
+        <div :style="{display: 'flex', justifyContent: 'center', marginTop: '30px'}">
+            <img :style="{width: '55px'}" src="../../public/hummingFace.png" alt="hummingFace">
+        </div>
+        <div :style="{padding: '13px 26px'}">
+            <a-button id="change-button">
+                <a href="../plane.html" target="_blank">轻松一下</a>
+            </a-button>
+        </div>
+    </div>
 </template>
 
 <style scoped>
@@ -469,5 +480,21 @@ footer {
     display: flex;
     justify-content: center;
     height: 72px;
+}
+.plane-game {
+    position: fixed;
+    left: 22px;
+    top: 117px;
+    z-index: 222;
+    background: linear-gradient(180deg,#cfe2f2 40.15%,rgba(207,226,242,0) 100%);
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 22px;
+}
+#change-button {
+    border-radius: 6px;
+    background: rgba(179, 227, 252, 0.7);
+}
+#change-button:hover {
+    background: rgba(82, 191, 249, 0.7);
 }
 </style>

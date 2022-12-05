@@ -26,7 +26,7 @@ function handleLogin() {
         sendLoginInfo(postObj).then(res => {
             if (res.data.code === 200) {
                 localStorage.setItem('token', res.data.value.access_token);
-                localStorage.setItem('username', username);
+                localStorage.setItem('merchantname', username);
                 Message.info("登陆成功！");
                 router.push({path: '/merchant/management'})
             } else {

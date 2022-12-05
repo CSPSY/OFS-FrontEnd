@@ -7,7 +7,7 @@ import GoodsChange from './components/Goods-change.vue';
 // data 数据
 const data = reactive({
     userInfo: {
-        username: localStorage.getItem('username')
+        username: localStorage.getItem('merchantname')
     },
     navText: {
         first: '商品管理',

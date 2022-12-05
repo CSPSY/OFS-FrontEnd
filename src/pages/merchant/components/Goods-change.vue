@@ -116,9 +116,9 @@ const deleteGoods = (idx) => {
             </template>
             <template #changeInfo="{ rowIndex }">
                 <div :style="{display: 'flex', justifyContent: 'space-between', paddingRight: '6px'}">
-                    <a-button @click="showInfoCard(rowIndex)" class="item-button">修改</a-button>
+                    <a-button @click="showInfoCard(rowIndex)" id="change-button" class="item-button" disabled>修改</a-button>
                     <a-popconfirm @ok="deleteGoods(rowIndex)" content="确定下架该商品吗?" position="left">
-                        <a-button class="item-button">下架</a-button>
+                        <a-button class="item-button" status="danger">下架</a-button>
                     </a-popconfirm>
                 </div>
             </template>
@@ -143,10 +143,12 @@ const deleteGoods = (idx) => {
     outline: 0;
     border-radius: 6px;
     padding: 8px 12px;
-    background: rgba(179, 227, 252, 0.7);
     letter-spacing: .26rem;
 }
-.item-button:hover {
+#change-button {
+    background: rgba(179, 227, 252, 0.7);
+}
+#change-button:hover {
     background: rgba(82, 191, 249, 0.7);
 }
 /* 遮罩层 */
