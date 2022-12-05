@@ -10,10 +10,33 @@
 
 	<script type="text/javascript" src="lib/three.min.js"></script>
 	<script type="text/javascript" src="plane.js"></script>
-
+	<style>
+		#change-button {
+			cursor: pointer;
+			border: 0;
+			outline: 0;
+			border-radius: 6px;
+			padding: 8px 12px;
+			letter-spacing: .26rem;
+			background: rgba(179, 227, 252, 0.7);
+		}
+		#change-button:hover {
+			background: rgba(82, 191, 249, 0.7);
+		}
+		.items-button {
+			position: absolute;
+			left: 22px;
+			top: 22px;
+			z-index: 11111;
+			
+		}
+	</style>
 </head>
 
 <body>
+	<div class="items-button">
+		<button id="change-button" onclick="javascript:location.reload();">重新开始游戏</button>
+	</div>
 	<div id="world">
 		<div id="Survival">Time: <span id="Time">0.0</span>s</div>
 	</div>
