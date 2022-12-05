@@ -119,8 +119,8 @@ const paymentBtn = () => {
             productId: data.paymentData[items[i]].id,
             nums: data.items.cnts[i]
         }
-        data.paymentData[items[i]].total = data.items.total[i];
-        data.paymentData[items[i]].cnts = data.items.cnts[i];
+        data.paymentData[items[i]].total = data.items.total[items[i]];
+        data.paymentData[items[i]].cnts = data.items.cnts[items[i]];
         postObj.data.push(tmp);
         payObj.push(data.paymentData[items[i]]);
     }

@@ -1,6 +1,7 @@
 <script setup>
 import { payOrderMoney } from '../../api/index.js';
 import { Message } from '@arco-design/web-vue';
+import { router } from '../../router/index.js';
 
 const payMoney = () => {
     const postObj = {
@@ -10,6 +11,7 @@ const payMoney = () => {
     payOrderMoney(postObj).then(res => {
        if (res.data.code === 200) {
             Message.info('支付成功！');
+            router.push('/');
        } 
     }).catch(err => {
         console.log(err);

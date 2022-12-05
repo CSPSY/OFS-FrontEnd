@@ -86,7 +86,7 @@ const changeAddr = (addr) => {
 
 const payBtn = () => {
     if (data.addr === '') {
-        Message.info('请填写收获地址！');
+        Message.info('请填写收货地址！');
         return;
     }
     localStorage.setItem('addr', data.addr);
