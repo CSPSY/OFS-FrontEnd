@@ -28,6 +28,15 @@ const APIWithoutToken = axios.create({
     baseURL: 'http://47.94.161.52/ofs'
 });
 
+const APINoTokenForm = axios.create({
+    baseURL: 'http://47.94.161.52/ofs'
+})
+
+APINoTokenForm.interceptors.request.use((req) => {
+    req.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+    return req;
+});
+
 const sendLoginInfo = (postObj) => {
     return APIWithoutToken.post('/api/login', postObj);
 };
@@ -91,13 +100,23 @@ const deleteManageGoods = (putObj) => {
 };
 
 // 注册
-// 获取邮箱验证码
+// 发送邮箱验证码
 const sendCaptcha = (postObj) => {
-    return APIWithoutToken.post('/api/generate-code', postObj);
+    return APINoTokenForm.post('/api/generate-code', postObj);
 };
 
+// 获取后台邮箱验证码
+const getCaptcha = (postObj) => {
+    return APINoTokenForm.post('/api/query-code', postObj);
+};
+
+// 发送注册信息
+const sendRegisterInfo = (postObj) => {
+    return APIWithoutToken.post('/register', postObj);
+}
+
 export { sendLoginInfo, sendLogout };
-export { sendCaptcha };
+export { sendCaptcha, getCaptcha, sendRegisterInfo };
 export { judgeToken, getMerchantsItems, addItemsToShCart, searchMerchant, getClassMerchants };
 export { getShoppingCart, addSalesOrder };
 export { getOrderAddr, payOrderMoney };

@@ -2,6 +2,7 @@
 import { IconUser, IconLock, IconEmail } from '@arco-design/web-vue/es/icon';
 import { reactive } from 'vue';
 import { Message } from '@arco-design/web-vue';
+import { sendCaptcha, getCaptcha, sendRegisterInfo } from '../../api/index.js';
 
 const data = reactive({
     userinfo: {
@@ -25,11 +26,55 @@ const handleRegister = () => {
         Message.info("请填写你的邮箱！");
     } else if (info.captcha === "") {
         Message.info("请填写邮箱验证码！")
-    } else if (info.password !== info.repassword) {
+    } else if (info.password !== info.rePassword) {
         Message.info("输入的两次密码不一致！")
     } else {
-
+        const postObj = { email: data.userinfo.email };
+        getCaptcha(postObj).then(res => {
+            if (res.data.code === 200) {
+                const value = res.data.value.code;
+                if (info.captcha !== value) {
+                    Message.info('验证码错误，请重新输入！');
+                    return;
+                }
+                const postObj = {
+                    username: info.username,
+                    email: info.email,
+                    role: "1",
+                    password: info.password
+                }
+                sendRegisterInfo(postObj).then(res => {
+                    if (res.data.code === 200) {
+                        Message.info('注册成功~');
+                        console.log(res);
+                        router.push('/login-user');
+                    }
+                }).catch(err => {
+                    console.log(err);
+                });
+            } else {
+                Message.info('验证码错误，请重新输入！');
+            }
+        }).catch(err => {
+            console.log(err);
+        });
     }
+};
+
+const getEmailCaptcha = () => {
+    if (data.userinfo.email === "") {
+        Message.info("请填写邮箱！");
+    }
+    const postObj = { email: data.userinfo.email };
+    sendCaptcha(postObj).then(res => {
+        if (res.data.code === 200) {
+            Message.info('邮箱验证码已发送，请查阅~');
+        } else {
+            Message.info('请填写正确的邮箱！');
+        }
+    }).catch(err => {
+        console.log(err);
+    });
 };
 
 </script>
