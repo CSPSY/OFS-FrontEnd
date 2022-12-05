@@ -1,5 +1,4 @@
 <script setup>
-import { payImg } from '../../utils/index.js';
 import { payOrderMoney } from '../../api/index.js';
 import { Message } from '@arco-design/web-vue';
 
@@ -8,7 +7,6 @@ const payMoney = () => {
         orderId: localStorage.getItem('orderId'),
         address: localStorage.getItem('addr')
     }
-    console.log(postObj);
     payOrderMoney(postObj).then(res => {
        if (res.data.code === 200) {
             Message.info('支付成功！');
@@ -33,7 +31,7 @@ const payMoney = () => {
             </nav>
         </header>
         <div :style="{display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '86px'}">
-            <img :src="payImg" alt="支付二维码" />
+            <img src="../../../public/pay.png" alt="支付二维码" />
             <div>
                 <a-button :style="{marginTop: '52px', marginRight: '82px'}">取消支付</a-button>
                 <a-button :style="{marginTop: '52px'}" @click="payMoney">确认支付</a-button>

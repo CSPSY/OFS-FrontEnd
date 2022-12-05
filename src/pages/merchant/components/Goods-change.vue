@@ -64,7 +64,6 @@ const getGoods = () => {
                 items[i].descr = items[i].descr.replaceAll('\\n', '\n');
             }
             data.goodsData = res.data.value;
-            console.log(res);
         } else {
             Message.info('商品信息获取异常');
         }
@@ -116,7 +115,7 @@ const deleteGoods = (idx) => {
             </template>
             <template #changeInfo="{ rowIndex }">
                 <div :style="{display: 'flex', justifyContent: 'space-between', paddingRight: '6px'}">
-                    <a-button @click="showInfoCard(rowIndex)" id="change-button" class="item-button" disabled>修改</a-button>
+                    <a-button @click="showInfoCard(rowIndex)" id="change-button" class="item-button">修改</a-button>
                     <a-popconfirm @ok="deleteGoods(rowIndex)" content="确定下架该商品吗?" position="left">
                         <a-button class="item-button" status="danger">下架</a-button>
                     </a-popconfirm>

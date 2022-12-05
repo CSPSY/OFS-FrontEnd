@@ -61,7 +61,7 @@ const getCartItems = () => {
     }).catch(err => {
         console.log(err);
     })
-}
+};
 getCartItems();
 
 // 数字输入框

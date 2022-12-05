@@ -99,6 +99,11 @@ const deleteManageGoods = (putObj) => {
     return API.put('/pro/del/' + putObj);
 };
 
+// 更新商品
+const updateManageGoods = (postObj) => {
+    return API.post('/pro/update', postObj);
+}
+
 // 注册
 // 发送邮箱验证码
 const sendCaptcha = (postObj) => {
@@ -113,11 +118,12 @@ const getCaptcha = (postObj) => {
 // 发送注册信息
 const sendRegisterInfo = (postObj) => {
     return APIWithoutToken.post('/register', postObj);
-}
+};
+
 
 export { sendLoginInfo, sendLogout };
 export { sendCaptcha, getCaptcha, sendRegisterInfo };
 export { judgeToken, getMerchantsItems, addItemsToShCart, searchMerchant, getClassMerchants };
 export { getShoppingCart, addSalesOrder };
 export { getOrderAddr, payOrderMoney };
-export { getManageGoods, deleteManageGoods };
+export { getManageGoods, deleteManageGoods, updateManageGoods };
