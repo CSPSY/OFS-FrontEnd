@@ -65,7 +65,7 @@ const getGoods = () => {
             }
             data.goodsData = res.data.value;
         } else {
-            Message.info('商品信息获取异常');
+            Message.info(res.data.msg);
         }
     }).catch(err => {
         console.log(err);

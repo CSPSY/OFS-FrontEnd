@@ -189,7 +189,7 @@ const handleLogout = () => {
         location.reload();
     }).catch(err => {
         console.log(err);
-    })
+    });
 };
 </script>
 
