@@ -204,4 +204,19 @@ const financialBin = (x) => {
 
 const payImg = "/public/pay.png";
 
+// 中转: 购物车 -> 支付
+const setOrderId = (value) => {
+    localStorage.setItem('orderId', value);
+};
+const getOrderId = () => {
+    return localStorage.getItem('orderId');
+};
+const setPayDatas = (payObj) => {
+    localStorage.setItem('payDatas', JSON.stringify(payObj));
+};
+const getPayDatas = () => {
+    return JSON.parse(localStorage.getItem('payDatas'));
+};
+
 export { images, itemsData, paymentData, financialBin, payImg, address, goodsData };
+export { getOrderId, setOrderId, setPayDatas, getPayDatas };

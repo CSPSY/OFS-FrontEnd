@@ -3,6 +3,7 @@ import { IconUser, IconLock } from '@arco-design/web-vue/es/icon';
 import { reactive, watch } from 'vue';
 import { sendLoginInfo } from '../../api/index.js';
 import { router } from '../../router/index.js';
+import { Message } from '@arco-design/web-vue';
 
 const data = reactive({
     loginInfo: {

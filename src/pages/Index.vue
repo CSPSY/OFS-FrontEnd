@@ -4,8 +4,9 @@ import { IconUser, IconClose } from '@arco-design/web-vue/es/icon';
 import '@arco-design/web-vue/dist/arco.css';
 import PersonalCard from './user/Personoal-card.vue';
 import GoodsCard from './user/Goods-card.vue';
-import { judgeToken, getMerchantsItems, addItemsToShCart, sendLogout, searchMerchant } from '../api/index.js';
+import { judgeToken, getMerchantsItems, addItemsToShCart, sendLogout, searchMerchant, getClassMerchants } from '../api/index.js';
 import { router } from '../router';
+import { Message } from '@arco-design/web-vue';
 
 // data 数据
 const data = reactive({
@@ -26,7 +27,8 @@ const data = reactive({
     // 搜索商品名称
     searchItemsName: '',
     searchItemsName2: '',
-    username: localStorage.getItem('username')
+    username: localStorage.getItem('username'),
+    classMap: ['蔬菜', '水果', '肉品', '干货', '水产', '糕点', '熟食', '日配']
 });
 
 // 导航栏搜索框是否展示，判断搜索框到顶部距离
@@ -103,11 +105,34 @@ const getItemsData = () => {
         console.log(err);
     });
 };
-
 getItemsData();
+
+// 获取分类商品数据
+const getClassItems = (idx) => {
+    idx += 1;
+    const getObj = idx;
+    console.log(getObj)
+    getClassMerchants(getObj).then(res => {
+        if (res.data.code === 200 && res.data.value.length) {
+            let items = res.data.value;
+            for (let i = 0; i < items.length; i ++) {
+                items[i].idx = i;
+                items[i].imgUrl = 'http://47.94.161.52/img/' + items[i].imgUrl;
+                items[i].descr = items[i].descr.replace('\n', '<br>');
+            }
+            data.items = res.data.value;
+        } 
+    }).catch(err => {
+        console.log(err);
+    });
+};
 
 // 加入购物车
 const addItemsToCart = (id) => {
+    if (!data.loginStatus) {
+        Message.info("请先登录!");
+        return;
+    }
     const postObj = {
         pid : id
     }
@@ -126,7 +151,7 @@ const toShCart = () => {
         router.push('/user/shopping-cart');
     } else {
         Message.info("请先登录!");
-        return false;
+        return;
     }
 };
 
@@ -205,29 +230,8 @@ const handleLogout = () => {
                     <div class="classify">
                         <h3 style="font-weight: 460; padding-left: 6px; font-size: 1.3rem; margin-bottom: 18px;">分类</h3>
                         <div class="list-items">
-                            <li class="classify-items">
-                                <a href="#">水果</a>
-                            </li>
-                            <li class="classify-items">
-                                <a href="#">蔬菜</a>
-                            </li>
-                            <li class="classify-items">
-                                <a href="#">肉品</a>
-                            </li>
-                            <li class="classify-items">
-                                <a href="#">水产</a>
-                            </li>
-                            <li class="classify-items">
-                                <a href="#">干货</a>
-                            </li>
-                            <li class="classify-items">
-                                <a href="#">日配</a>
-                            </li>
-                            <li class="classify-items">
-                                <a href="#">熟食</a>
-                            </li>
-                            <li class="classify-items">
-                                <a href="#">糕点</a>
+                            <li class="classify-items" v-for="items, index in data.classMap">
+                                <a @click="getClassItems(index)">{{items}}</a>
                             </li>
                         </div>
                     </div>
@@ -307,7 +311,7 @@ const handleLogout = () => {
         <icon-close class="close-btn" size="34" @click="disappearCard" />
     </div>
     <personal-card class="card-center personal-card" v-show="data.showPersonal"></personal-card>
-    <goods-card class="card-center desc-card" :goods-desc="data.goodsItem" v-show="data.showGoodsDesc"></goods-card>
+    <goods-card class="card-center desc-card" :goods-desc="data.goodsItem" :login-status="data.loginStatus" v-show="data.showGoodsDesc"></goods-card>
 </template>
 
 <style scoped>
@@ -381,6 +385,7 @@ const handleLogout = () => {
     border-radius: 6px;
 }
 .classify-items a {
+    cursor: pointer;
     border-left: 1px black solid;
     padding: 6px 28px 6px 5px;
     width: 100%;

@@ -13,6 +13,10 @@ const props = defineProps({
     goodsDesc   : {
         type: Object,
         required: true,
+    },
+    loginStatus : {
+        type: Boolean,
+        required: true,
     }
 });
 
@@ -29,11 +33,19 @@ const handlePlus = () => {
 
 // 加入购物车
 const addShoppingCart = () => {
+    if (!props.loginStatus) {
+        Message.info("请先登录！");
+        return;
+    }
     Message.info("加入购物车成功！");
 };
 
 // 立即购买
 const purchaseGoods = () => {
+    if (!props.loginStatus) {
+        Message.info("请先登录！");
+        return;
+    }
     router.push({path: '/user/payment'});
 };
 </script>
@@ -53,9 +65,9 @@ const purchaseGoods = () => {
         <section class="item-control">
             <div :style="{width: '33%', display: 'flex', alignItems: 'center'}">
                 <p :style="{lineHeight: '1.55rem', fontSize: '1rem'}">单价</p>
-                <p class="price-text">￥{{goodsDesc.price}}</p>
-                <p class="price-text" v-show="goodsDesc.memberPrice !== '0'" style="color: #fc5531; border-left: 1.2px #9698a3 solid;">
-                    ￥{{goodsDesc.memberPrice}}
+                <p class="price-text">￥{{goodsDesc.normalprice}}</p>
+                <p class="price-text" v-show="goodsDesc.memberprice !== '0'" style="color: #fc5531; border-left: 1.2px #9698a3 solid;">
+                    ￥{{goodsDesc.memberprice}}
                     <div style="font-size: .87rem; text-align: center; letter-spacing: .16rem; margin-top: 4px;">会员价</div>
                 </p>
             </div>

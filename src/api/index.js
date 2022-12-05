@@ -1,9 +1,11 @@
 import axios from 'axios';
-import Qs from 'qs';
 
 const API = axios.create({
-    // 本地 mock URL
-    baseURL: 'http://47.94.161.52'
+    baseURL: 'http://47.94.161.52/ofs'
+});
+
+const APIWithJson = axios.create({
+    baseURL: 'http://47.94.161.52/ofs'
 });
 
 // 请求前检测是否有 token，并携带
@@ -15,8 +17,15 @@ API.interceptors.request.use((req) => {
     return req;
 });
 
+APIWithJson.interceptors.request.use((req) => {
+    if (localStorage.getItem('token')) {
+        req.headers.Authorization = localStorage.getItem('token');
+    }
+    return req;
+});
+
 const APIWithoutToken = axios.create({
-    baseURL: 'http://47.94.161.52'
+    baseURL: 'http://47.94.161.52/ofs'
 });
 
 const sendLoginInfo = (postObj) => {
@@ -37,6 +46,11 @@ const getMerchantsItems = () => {
     return APIWithoutToken.get('/pro/home');
 };
 
+// 分类商品展示
+const getClassMerchants = (getObj) => {
+    return APIWithoutToken.get('/category/getProByCat/' + getObj);
+};
+
 // 购物车展示
 const getShoppingCart = () => {
     return API.get('/pro/shoppingCar');
@@ -54,9 +68,19 @@ const searchMerchant = (getObj) => {
 
 // 购物车页面，立即购买，添加订单
 const addSalesOrder = (postObj) => {
-    return API.post('/salesOrder/generate', postObj);
+    return APIWithJson.post('/salesOrder/generate', postObj);
+};
+
+// 支付页面，地址选项
+const getOrderAddr = () => {
+    return API.get('/salesOrder/addr');
+};
+
+const payOrderMoney = (postObj) => {
+    return API.post('/salesOrder/confirm', postObj);
 };
 
 export { sendLoginInfo, sendLogout };
-export { judgeToken, getMerchantsItems, addItemsToShCart, searchMerchant };
+export { judgeToken, getMerchantsItems, addItemsToShCart, searchMerchant, getClassMerchants };
 export { getShoppingCart, addSalesOrder };
+export { getOrderAddr, payOrderMoney };

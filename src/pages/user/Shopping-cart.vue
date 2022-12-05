@@ -1,6 +1,6 @@
 <script setup>
 import { reactive } from 'vue';
-import { financialBin } from '../../utils/index.js';
+import { financialBin, setOrderId, setPayDatas } from '../../utils/index.js';
 import { IconPlus, IconMinus } from '@arco-design/web-vue/es/icon';
 import { router } from '../../router/index.js';
 import { getShoppingCart, addSalesOrder } from '../../api/index.js';
@@ -43,7 +43,8 @@ const data = reactive({
     items: {
         cnts: [],
         total: [],
-        selected: []
+        selected: [],
+        sum: []
     },
     totalPrice: 0
 });
@@ -53,6 +54,7 @@ const getCartItems = () => {
     getShoppingCart().then(res => {
         data.paymentData = res.data.value.slice(4);
         for (let i = 0; i < data.paymentData.length; i ++) {
+            data.items.sum[i] = parseInt(data.paymentData[i].sum);
             data.items.cnts[i] = parseInt(data.paymentData[i].nums);
             data.paymentData[i].key = i + 1;
         }
@@ -70,7 +72,11 @@ const handleMinus = (idx) => {
 };
 
 const handlePlus = (idx) => {
-    data.items.cnts[idx] ++;
+    if (data.items.cnts[idx] < data.items.sum[idx]) {
+        data.items.cnts[idx] ++;
+    } else {
+        Message.info('商品库存不足！');
+    }
 };
 
 // 计算单个商品总价
@@ -99,18 +105,39 @@ const rowSelection = ({
 });
 
 const paymentBtn = () => {
-    if (data.items.selected.length === 0) {
+    const items = data.items.selected;
+    if (items.length === 0) {
         Message.info('请选择商品！');
         return;
     }
-    addSalesOrder().then(res => {
-
+    const payObj = [];
+    const postObj = {
+        data: []
+    }
+    for (let i = 0; i < items.length; i ++) {
+        const tmp = {
+            productId: data.paymentData[items[i]].id,
+            nums: data.items.cnts[i]
+        }
+        data.paymentData[items[i]].total = data.items.total[i];
+        data.paymentData[items[i]].cnts = data.items.cnts[i];
+        postObj.data.push(tmp);
+        payObj.push(data.paymentData[items[i]]);
+    }
+    addSalesOrder(postObj).then(res => {
+        if (res.data.code === 200) {
+            setPayDatas(payObj);
+            setOrderId(res.data.value);
+            router.push({path: '/user/payment'});
+        }
+    }).catch(err => {
+        console.log(err);
     });
-    router.push({path: '/user/payment'});
 };
 
 // 计算所选商品总价
 const computeSelectedGoods = () => {
+    const items = [];
     const goods = document.querySelectorAll('input');
     let idx = -2, total = 0;
     for (let i = 0; i < goods.length; i ++) {
@@ -118,14 +145,19 @@ const computeSelectedGoods = () => {
             idx ++;
             if (goods[i].checked) {
                 if (idx === -1) {
+                    for (let j = 0; j < (goods.length - 1) / 2; j ++) {
+                        items.push(j);
+                    }
                     total = computePayMoney();
                     break;
                 } else {
                     total += parseFloat(data.items.total[idx]);
+                    items.push(idx);
                 }
             }
         }
     }
+    data.items.selected = items;
     data.totalPrice = financialBin(total);
 }
 
@@ -161,7 +193,7 @@ const computeSelectedGoods = () => {
                             <span class="btn-control" @click="handleMinus(rowIndex)">
                                 <IconMinus />
                             </span>
-                            <a-input-number v-model.number="data.items.cnts[rowIndex]" hide-button :min="0" :precision="0" />
+                            <a-input-number v-model.number="data.items.cnts[rowIndex]" hide-button :min="0" :max="data.items.sum[rowIndex]" :precision="0" />
                             <span class="btn-control" @click="handlePlus(rowIndex)">
                                 <IconPlus />
                             </span>
