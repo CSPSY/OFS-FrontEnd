@@ -7,7 +7,7 @@ import GoodsChange from './components/Goods-change.vue';
 // data 数据
 const data = reactive({
     userInfo: {
-        username: 'devleoper'
+        username: localStorage.getItem('username')
     },
     navText: {
         first: '商品管理',
@@ -17,7 +17,7 @@ const data = reactive({
 
 // nav 显示信息
 const infoMap = new Map([
-    ['1_1', '商品信息修改'], ['1_2', '商品分类'], ['1_3', '商品添加'], ['1_4', '商品下架'],
+    ['1_1', '商品信息修改'], ['1_2', '商品分类'], ['1_3', '商品添加'],
     ['2_1', '订单修改'], ['2_2', '订单撤销']
 ]);
 
@@ -44,7 +44,7 @@ const onClickMenuItem = (key) => {
                     <a-menu-item key="1_1">商品信息修改</a-menu-item>
                     <a-menu-item key="1_2">商品分类</a-menu-item>
                     <a-menu-item key="1_3">商品添加</a-menu-item>
-                    <a-menu-item key="1_4">商品下架</a-menu-item>
+                    <!-- <a-menu-item key="1_4">商品下架</a-menu-item> -->
                 </a-sub-menu>
                 <a-sub-menu key="2">
                     <template #title>
@@ -68,7 +68,7 @@ const onClickMenuItem = (key) => {
         
         <a-layout>
             <a-layout-header style="padding-left: 20px; font-size: 1.12rem;">
-                Hi！ {{data.userInfo.username}}
+                Hi！ 商家 {{data.userInfo.username}}
             </a-layout-header >
             <a-layout style="padding: 0 14px;">
                 <a-breadcrumb :style="{ margin: '16px 0' }">

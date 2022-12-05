@@ -80,7 +80,25 @@ const payOrderMoney = (postObj) => {
     return API.post('/salesOrder/confirm', postObj);
 };
 
+// 商家获取商品列表
+const getManageGoods = () => {
+    return API.get('/pro/getShop');
+};
+
+// 商家删除商品
+const deleteManageGoods = (putObj) => {
+    return API.put('/pro/del/' + putObj);
+};
+
+// 注册
+// 获取邮箱验证码
+const sendCaptcha = (postObj) => {
+    return APIWithoutToken.post('/api/generate-code', postObj);
+};
+
 export { sendLoginInfo, sendLogout };
+export { sendCaptcha };
 export { judgeToken, getMerchantsItems, addItemsToShCart, searchMerchant, getClassMerchants };
 export { getShoppingCart, addSalesOrder };
 export { getOrderAddr, payOrderMoney };
+export { getManageGoods, deleteManageGoods };

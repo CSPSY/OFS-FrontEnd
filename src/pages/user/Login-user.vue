@@ -1,6 +1,6 @@
 <script setup>
 import { IconUser, IconLock } from '@arco-design/web-vue/es/icon';
-import { reactive, watch } from 'vue';
+import { reactive } from 'vue';
 import { sendLoginInfo } from '../../api/index.js';
 import { router } from '../../router/index.js';
 import { Message } from '@arco-design/web-vue';
@@ -29,6 +29,8 @@ function handleLogin() {
                 localStorage.setItem('username', username);
                 Message.info("登陆成功！");
                 router.push({path: '/'})
+            } else {
+                Message.info('用户名或密码错误');
             }
             }).catch(err => {
                 console.log(err);

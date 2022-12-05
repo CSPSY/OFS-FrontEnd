@@ -1,16 +1,19 @@
 <script setup>
 import { reactive } from 'vue';
-import { goodsData } from '../../../utils/index.js';
+// import { goodsData } from '../../../utils/index.js';
 import { IconClose } from '@arco-design/web-vue/es/icon';
 import InfoChange from './Info-change.vue';
+import { getManageGoods, deleteManageGoods } from '../../../api';
+import { Message } from '@arco-design/web-vue';
+import { nextTick } from 'vue';
 
 // 列名
 const columns = [
     {
         width: '120',
         title: '商品图片',
-        dataIndex: 'imgAdr',
-        slotName: 'imgAdr'
+        dataIndex: 'imgUrl',
+        slotName: 'imgUrl'
     },
     {
         width: '160',
@@ -19,37 +22,57 @@ const columns = [
     },
     {
         title: '商品描述',
-        dataIndex: 'desc'
+        dataIndex: 'descr'
     },
     {
         width: '150',
         title: '商品单价/元',
-        dataIndex: 'price'
+        dataIndex: 'normalprice'
     },
     {
         width: '150',
         title: '商品会员价/元',
-        dataIndex: 'memberPrice'
+        dataIndex: 'memberprice'
     },
     {
-        width: '140',
+        width: '130',
         title: '商品库存',
-        dataIndex: 'cnts'
+        dataIndex: 'sum'
     },
     {
-        width: '160',
-        title: '商品信息修改',
+        width: '170',
+        title: '商品管理',
         slotName: 'changeInfo'
     }
 ];
 
 // 数据
 const data = reactive({
-    goodsData,
+    goodsData: [],
     goodsInfo: {},
     showCoverLayer: false,
     showInfoCard: false
 });
+
+const getGoods = () => {
+    getManageGoods().then(res => {
+        if (res.data.code === 200) {
+            let items = res.data.value;
+            for (let i = 0; i < items.length; i ++) {
+                items[i].idx = i;
+                items[i].imgUrl = 'http://47.94.161.52/img/' + items[i].imgUrl;
+                items[i].descr = items[i].descr.replaceAll('\\n', '\n');
+            }
+            data.goodsData = res.data.value;
+            console.log(res);
+        } else {
+            Message.info('商品信息获取异常');
+        }
+    }).catch(err => {
+        console.log(err);
+    });
+};
+getGoods();
 
 const showInfoCard = (idx) => {
     data.showCoverLayer = true;
@@ -62,6 +85,22 @@ const disappearCard = () => {
     data.showCoverLayer = false;
     data.showInfoCard = false;
 };
+
+// 删除商品
+const deleteGoods = (idx) => {
+    const putObj = data.goodsData[idx].id;
+    deleteManageGoods(putObj).then(res => {
+        if (res.data.code === 200) {
+            Message.info('商品下架成功~');
+            nextTick(() => {location.reload();});
+        } else {
+            Message.info('商品下架失败~');
+        }
+    }).catch(err => {
+        console.log(err);
+    });
+}
+
 </script>
 
 <template>
@@ -72,11 +111,16 @@ const disappearCard = () => {
             column-resizable
             :data="data.goodsData"
         >
-            <template #imgAdr="{ rowIndex }">
-                <img :src="data.goodsData[rowIndex].imgAdr" alt="the merchant images" :style="{height: '50px', width: '70px'}" />
+            <template #imgUrl="{ rowIndex }">
+                <img :src="data.goodsData[rowIndex].imgUrl" alt="the merchant images" :style="{height: '50px', width: '70px'}" />
             </template>
             <template #changeInfo="{ rowIndex }">
-                <a-button @click="showInfoCard(rowIndex)" class="item-button">修改</a-button>
+                <div :style="{display: 'flex', justifyContent: 'space-between', paddingRight: '6px'}">
+                    <a-button @click="showInfoCard(rowIndex)" class="item-button">修改</a-button>
+                    <a-popconfirm @ok="deleteGoods(rowIndex)" content="确定下架该商品吗?" position="left">
+                        <a-button class="item-button">下架</a-button>
+                    </a-popconfirm>
+                </div>
             </template>
         </a-table>
     </div>
